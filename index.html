@@ -3,12 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HKSAARAV // Tactical Combat Dossier</title>
+  <title>HKSAARAV // GHOST OPERATOR &bull; TASK FORCE 141</title>
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Orbitron, Chakra Petch, JetBrains Mono, Syne -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&family=JetBrains+Mono:wght@400;600;800&family=Orbitron:wght@600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -16,30 +25,28 @@
       theme: {
         extend: {
           colors: {
-            tactical: {
-              black: '#05070a',
-              dark: '#0a0e14',
-              panel: '#101620',
-              border: '#1b2636',
-              accent: '#00f0ff',
-              skull: '#e2e8f0',
-              crimson: '#ff2a5f',
-              amber: '#ffb020',
-              lime: '#22c55e',
-              nvg: '#10b981',
-              camo: '#1e2820',
-              olive: '#47553c'
-            }
+            deepVoid: '#040306',
+            matrixBlack: '#08080c',
+            panelCharcoal: '#0d0e14',
+            panelBorder: 'rgba(255, 255, 255, 0.08)',
+            ghostRed: '#e61937',
+            bloodCrimson: '#940c20',
+            taskAmber: '#e5a93c',
+            nvgGreen: '#00ff88',
+            cyberCyan: '#00f0ff',
+            slateGhost: '#94a3b8'
           },
           fontFamily: {
             orbitron: ['Orbitron', 'sans-serif'],
-            rajdhani: ['Rajdhani', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace']
+            chakra: ['"Chakra Petch"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            syne: ['Syne', 'sans-serif']
           },
           boxShadow: {
-            neonCyan: '0 0 25px rgba(0, 240, 255, 0.35)',
-            neonRed: '0 0 25px rgba(255, 42, 95, 0.4)',
-            nvgGlow: '0 0 25px rgba(16, 185, 129, 0.4)'
+            neonRed: '0 0 30px rgba(230, 25, 55, 0.45)',
+            amberGlow: '0 0 30px rgba(229, 169, 60, 0.35)',
+            cyanGlow: '0 0 25px rgba(0, 240, 255, 0.35)',
+            nvgGlow: '0 0 25px rgba(0, 255, 136, 0.35)'
           }
         }
       }
@@ -47,859 +54,1099 @@
   </script>
 
   <style>
+    /* Custom Spec-Ops Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #040306;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #e61937, #e5a93c);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00f0ff;
+    }
+
     body {
-      background-color: #05070a;
-      color: #cbd5e1;
-      font-family: 'Rajdhani', sans-serif;
+      background-color: #040306;
+      color: #e2e8f0;
+      font-family: 'Chakra Petch', sans-serif;
       overflow-x: hidden;
     }
-    ::selection {
-      background: #00f0ff;
-      color: #000;
-    }
-    .hud-grid {
-      background-size: 32px 32px;
-      background-image: 
-        linear-gradient(to right, rgba(0, 240, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
-    }
-    .hud-border {
-      position: relative;
-      border: 1px solid rgba(0, 240, 255, 0.25);
-    }
-    .hud-border::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      width: 10px;
-      height: 10px;
-      border-top: 2px solid #00f0ff;
-      border-left: 2px solid #00f0ff;
-    }
-    .hud-border::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      right: -2px;
-      width: 10px;
-      height: 10px;
-      border-bottom: 2px solid #00f0ff;
-      border-right: 2px solid #00f0ff;
-    }
-    .hazard-stripe {
+
+    /* Tactical Hazard Striping */
+    .hazard-stripes {
       background: repeating-linear-gradient(
         -45deg,
-        rgba(255, 176, 32, 0.15),
-        rgba(255, 176, 32, 0.15) 10px,
-        rgba(0, 0, 0, 0.4) 10px,
-        rgba(0, 0, 0, 0.4) 20px
+        rgba(229, 169, 60, 0.12),
+        rgba(229, 169, 60, 0.12) 10px,
+        transparent 10px,
+        transparent 20px
       );
     }
-    .stencil-text {
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+
+    /* Polygon Beveled Cuts */
+    .bevel-box {
+      clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
     }
-    .scanline {
-      position: fixed;
+    .bevel-btn {
+      clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
+    }
+
+    /* Glitch Text Effect */
+    .glitch-text {
+      position: relative;
+      display: inline-block;
+    }
+    .glitch-text::before,
+    .glitch-text::after {
+      content: attr(data-text);
+      position: absolute;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
+      clip: rect(0, 0, 0, 0);
+    }
+    .glitch-text:hover::before {
+      left: -2px;
+      text-shadow: 2px 0 #e61937;
+      animation: glitch-anim-1 1.2s infinite linear alternate-reverse;
+    }
+    .glitch-text:hover::after {
+      left: 2px;
+      text-shadow: -2px 0 #00f0ff;
+      animation: glitch-anim-2 1.6s infinite linear alternate-reverse;
+    }
+    @keyframes glitch-anim-1 {
+      0% { clip: rect(10px, 9999px, 30px, 0); }
+      40% { clip: rect(70px, 9999px, 85px, 0); }
+      75% { clip: rect(25px, 9999px, 50px, 0); }
+      100% { clip: rect(85px, 9999px, 110px, 0); }
+    }
+    @keyframes glitch-anim-2 {
+      0% { clip: rect(45px, 9999px, 75px, 0); }
+      40% { clip: rect(15px, 9999px, 35px, 0); }
+      80% { clip: rect(80px, 9999px, 95px, 0); }
+      100% { clip: rect(5px, 9999px, 25px, 0); }
+    }
+
+    /* CRT Scanline & Grain Texture */
+    .crt-vignette {
+      background: radial-gradient(circle at center, transparent 55%, rgba(0, 0, 0, 0.88) 100%),
+                  linear-gradient(rgba(18, 16, 26, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+      background-size: 100% 100%, 100% 3px;
       pointer-events: none;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-      background-size: 100% 3px, 4px 100%;
-      z-index: 90;
-      opacity: 0.65;
     }
-    @keyframes radarSweep {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+
+    /* 3D Card Hover Perspective */
+    .card-3d-wrap {
+      perspective: 1000px;
     }
-    .animate-radar {
-      animation: radarSweep 6s linear infinite;
+    .card-3d {
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.4, 1), box-shadow 0.25s ease;
+      transform-style: preserve-3d;
     }
-    .stamp-classified {
-      border: 2px dashed #ff2a5f;
-      color: #ff2a5f;
-      transform: rotate(-6deg);
-      text-shadow: 0 0 8px rgba(255, 42, 95, 0.4);
+
+    /* Subtle Infinite Grid Shift */
+    .grid-bg-animated {
+      background-image:
+        radial-gradient(circle at 50% 25%, rgba(230, 25, 55, 0.1) 0%, transparent 60%),
+        radial-gradient(circle at 80% 85%, rgba(229, 169, 60, 0.08) 0%, transparent 50%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+      animation: gridDrift 40s linear infinite;
+    }
+    @keyframes gridDrift {
+      0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+      100% { background-position: 0 0, 0 0, 480px 480px, 0 480px; }
     }
   </style>
 </head>
 
-<body class="hud-grid min-h-screen relative selection:bg-tactical-accent selection:text-black">
-  <!-- Scanline layer for CRT military aesthetic -->
-  <div class="scanline"></div>
+<body class="grid-bg-animated relative min-h-screen text-slate-100 selection:bg-ghostRed selection:text-white">
 
-  <!-- Tactical Alert & Mission Coordinates Ribbon -->
-  <div class="bg-black/90 border-b border-tactical-border/90 px-4 py-1.5 text-[11px] font-mono flex flex-wrap justify-between items-center text-slate-400">
+  <!-- Interactive Dynamic Background Canvas (Radar, Reticles, Tracers, Particles) -->
+  <canvas id="tacticalCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-75"></canvas>
+
+  <!-- Ambient Light Orbs -->
+  <div class="fixed top-20 -left-40 w-96 h-96 bg-ghostRed/15 rounded-full blur-[130px] pointer-events-none z-0"></div>
+  <div class="fixed top-1/2 -right-40 w-[28rem] h-[28rem] bg-taskAmber/10 rounded-full blur-[140px] pointer-events-none z-0"></div>
+  <div class="fixed -bottom-20 left-1/3 w-80 h-80 bg-cyberCyan/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
+  <!-- CRT Vignette Overlay -->
+  <div class="fixed inset-0 crt-vignette z-40 pointer-events-none opacity-50"></div>
+
+  <!-- Top Tactical Satellite Feed & Status Bar -->
+  <div class="bg-black/90 border-b border-white/10 text-[11px] font-mono py-1.5 px-4 sticky top-0 z-50 backdrop-blur-md flex flex-wrap justify-between items-center text-slate-300">
     <div class="flex items-center gap-3">
-      <span class="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-        DEFCON 1 // SATCOM LINKED
+      <span class="inline-flex items-center gap-1.5 text-ghostRed font-extrabold uppercase tracking-wider">
+        <span class="w-2 h-2 rounded-full bg-ghostRed animate-ping"></span>
+        TF-141 // CLASSIFIED INTEL
       </span>
-      <span class="hidden sm:inline text-slate-600">|</span>
-      <span class="hidden sm:inline">GRID: 34.0522°N 118.2437°W</span>
       <span class="hidden md:inline text-slate-600">|</span>
-      <span class="hidden md:inline text-tactical-amber">PROTOCOL: GHOST-141</span>
-    </div>
-    <div class="flex items-center gap-4 text-tactical-accent">
-      <span class="cursor-pointer hover:underline" onclick="copyDiscordHandle()">
-        <i class="fa-brands fa-discord"></i> DISCORD: <strong id="topDiscordText">Aarav.55</strong> [CLICK TO COPY]
+      <span class="text-taskAmber hidden sm:inline">
+        <i class="fa-solid fa-satellite mr-1"></i>SATCOM: ACTIVE [INDIA MIL-NODE]
       </span>
+      <span class="hidden md:inline text-slate-600">|</span>
+      <span class="text-cyberCyan font-bold hidden lg:inline">
+        OPERATIONAL TIME: <span id="clockIST" class="text-white">--:--:-- IST</span>
+      </span>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <!-- SFX Audio Toggle Button -->
+      <button onclick="toggleAudioSFX()" id="audioBtn" class="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-panelCharcoal border border-white/15 hover:border-ghostRed text-slate-200 hover:text-ghostRed text-[11px] transition">
+        <i class="fa-solid fa-volume-high text-ghostRed" id="audioIcon"></i>
+        <span id="audioLabel">TACTICAL SFX: ON</span>
+      </button>
+
+      <!-- Direct Discord Quick Link -->
+      <a href="https://discordapp.com/users/Aarav.55" target="_blank" rel="noopener noreferrer" class="text-white hover:text-taskAmber transition flex items-center gap-1.5 font-bold">
+        <i class="fa-brands fa-discord text-[#5865F2]"></i> Aarav.55
+      </a>
     </div>
   </div>
 
-  <nav class="sticky top-0 z-50 backdrop-blur-md bg-tactical-black/90 border-b border-tactical-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <!-- Logo / Callout -->
-      <div class="flex items-center space-x-3">
-        <div class="relative w-10 h-10 rounded bg-tactical-panel border-2 border-tactical-accent/60 flex items-center justify-center text-tactical-accent font-orbitron font-bold">
-          <i class="fa-solid fa-crosshairs text-lg animate-pulse"></i>
-          <div class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-tactical-crimson rounded-full border border-black"></div>
+  <!-- Navigation Bar -->
+  <nav class="relative z-30 bg-matrixBlack/95 backdrop-blur-xl border-b border-white/10 px-4 sm:px-8 py-3.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Identity Logo (Uses 18217 profile or badge fallback) -->
+      <a href="#hero" class="flex items-center space-x-3.5 group">
+        <div class="relative w-12 h-12 rounded-xl bg-panelCharcoal border-2 border-ghostRed/80 overflow-hidden shadow-neonRed group-hover:scale-105 transition-all">
+          <img 
+            src="18217.png" 
+            alt="Ghost Simon Riley" 
+            class="w-full h-full object-cover object-top"
+            onerror="handleImgFallback(this, ['18217.jpg', '6642.png', 'https://placehold.co/120x120/0d0e14/e61937?text=GHOST'])"
+          />
+          <div class="absolute inset-0 bg-ghostRed/10 pointer-events-none"></div>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <span class="font-orbitron font-black text-lg tracking-wider text-white">HKSAARAV</span>
-            <span class="bg-tactical-crimson/20 border border-tactical-crimson/50 text-tactical-crimson text-[9px] px-1.5 py-0.2 rounded font-mono font-bold">TF-141</span>
+            <span class="font-orbitron font-black text-2xl text-white tracking-widest group-hover:text-ghostRed transition">AARAV</span>
+            <span class="bg-ghostRed/20 text-ghostRed text-[9px] font-mono px-2 py-0.5 rounded border border-ghostRed/60 font-bold uppercase tracking-widest">
+              HKSAARAV
+            </span>
           </div>
-          <span class="text-[10px] block font-mono text-tactical-accent tracking-widest uppercase">CALLSIGN // GHOST PROTOCOL</span>
+          <span class="text-[11px] font-mono text-taskAmber tracking-[0.2em] block uppercase">SPEC-OPS FRAGGER &bull; 4 YRS SERVICE</span>
         </div>
+      </a>
+
+      <!-- Desktop Nav Items -->
+      <div class="hidden md:flex items-center space-x-6 font-mono text-xs tracking-wider">
+        <a href="#dossier" class="text-slate-300 hover:text-ghostRed transition flex items-center gap-1.5">
+          <span class="text-ghostRed font-bold">01.</span> DOSSIER
+        </a>
+        <a href="#arsenal" class="text-slate-300 hover:text-taskAmber transition flex items-center gap-1.5">
+          <span class="text-taskAmber font-bold">02.</span> STATIC-HV BENCH
+        </a>
+        <a href="#archives" class="text-slate-300 hover:text-cyberCyan transition flex items-center gap-1.5">
+          <span class="text-cyberCyan font-bold">03.</span> GHOST GALLERY
+        </a>
+        <a href="#matrix" class="text-slate-300 hover:text-nvgGreen transition flex items-center gap-1.5">
+          <span class="text-nvgGreen font-bold">04.</span> 4-YR MATRIX
+        </a>
+        <a href="#aimlab" class="text-slate-300 hover:text-red-400 transition flex items-center gap-1.5">
+          <span class="text-red-400 font-bold">05.</span> AIM LAB
+        </a>
+        <a href="#comms" class="text-slate-300 hover:text-[#5865F2] transition flex items-center gap-1.5">
+          <span class="text-[#5865F2] font-bold">06.</span> COMMS
+        </a>
       </div>
 
-      <!-- Quick Nav Links -->
-      <div class="hidden md:flex items-center space-x-7 font-mono text-xs tracking-wider">
-        <a href="#dossier" class="hover:text-tactical-accent transition-colors flex items-center gap-1.5"><span class="text-tactical-accent">01.</span> DOSSIER</a>
-        <a href="#operator" class="hover:text-tactical-accent transition-colors flex items-center gap-1.5"><span class="text-tactical-accent">02.</span> GHOST</a>
-        <a href="#armory" class="hover:text-tactical-accent transition-colors flex items-center gap-1.5"><span class="text-tactical-accent">03.</span> STATIC-HV</a>
-        <a href="#games" class="hover:text-tactical-accent transition-colors flex items-center gap-1.5"><span class="text-tactical-accent">04.</span> COMBAT LOGS</a>
-        <a href="#comms" class="text-tactical-amber hover:text-white transition-colors flex items-center gap-1.5"><span class="text-tactical-crimson">&bull;</span> DISCORD COMMS</a>
-      </div>
+      <!-- Action Button -->
+      <a href="https://discordapp.com/users/Aarav.55" target="_blank" rel="noopener noreferrer" class="bevel-btn px-4 py-2 bg-gradient-to-r from-ghostRed to-bloodCrimson hover:from-red-600 hover:to-red-800 text-white font-orbitron text-xs font-bold tracking-wider transition-all shadow-neonRed flex items-center gap-2">
+        <i class="fa-brands fa-discord text-sm"></i>
+        <span>DM AARAV</span>
+      </a>
 
-      <!-- Tactical Audio & Action -->
-      <div class="flex items-center space-x-3">
-        <button id="sfxToggle" title="Toggle Tactical Radio & Weapons SFX" class="px-3 py-1.5 rounded bg-tactical-panel border border-tactical-border text-xs font-mono text-gray-300 hover:border-tactical-accent hover:text-tactical-accent transition flex items-center gap-2">
-          <i class="fa-solid fa-volume-high text-tactical-accent" id="sfxIcon"></i>
-          <span class="hidden sm:inline" id="sfxLabel">SFX: ON</span>
-        </button>
-
-        <button onclick="copyDiscordHandle()" title="Connect on Discord (Aarav.55)" class="px-3.5 py-1.5 rounded bg-[#5865F2]/20 border border-[#5865F2] text-[#5865F2] hover:bg-[#5865F2] hover:text-white font-mono text-xs font-bold transition-all flex items-center gap-2">
-          <i class="fa-brands fa-discord text-sm"></i>
-          <span class="hidden sm:inline">DM: Aarav.55</span>
-        </button>
-      </div>
     </div>
   </nav>
 
-  <header class="relative pt-12 pb-20 overflow-hidden border-b border-tactical-border/70">
-    <!-- Particle Canvas Background -->
-    <canvas id="radarCanvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-40"></canvas>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+  <header id="hero" class="relative z-20 pt-8 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-white/10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+      
+      <!-- Left Column: Operator Identity, Lore, Instant Copy Intel -->
+      <div class="lg:col-span-7 space-y-6">
         
-        <!-- Left Hero Column -->
-        <div class="lg:col-span-7 space-y-6">
-          <div class="flex flex-wrap items-center gap-2">
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded bg-tactical-panel/90 border border-tactical-accent/40 text-xs font-mono text-tactical-accent">
-              <span class="w-2 h-2 rounded-full bg-tactical-lime animate-ping"></span>
-              <span>SPECIAL OPS COMBATANT &bull; 4 YEARS ACTIVE</span>
-            </div>
-            <div class="stamp-classified px-2 py-0.5 rounded text-[11px] font-mono font-bold tracking-widest">
-              DECLASSIFIED // TOP SECRET
-            </div>
-          </div>
+        <!-- Tactical Badges -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-ghostRed/20 border border-ghostRed text-ghostRed font-mono text-xs font-bold tracking-wider">
+            <i class="fa-solid fa-skull"></i> OPERATOR: SIMON "GHOST" RILEY
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-taskAmber/20 border border-taskAmber text-taskAmber font-mono text-xs font-bold tracking-wider">
+            <i class="fa-solid fa-crosshairs"></i> SIGNATURE GUN: STATIC-HV
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-nvgGreen/20 border border-nvgGreen text-nvgGreen font-mono text-xs font-bold">
+            <i class="fa-solid fa-award"></i> 4 YRS COMBAT EXP
+          </span>
+        </div>
 
-          <h1 class="text-4xl sm:text-6xl font-orbitron font-black text-white tracking-tight uppercase">
-            AARAV <span class="text-transparent bg-clip-text bg-gradient-to-r from-tactical-accent via-cyan-300 to-tactical-crimson">"HKSAARAV"</span>
+        <!-- Main Title Header with Glitch -->
+        <div>
+          <h1 class="text-5xl sm:text-7xl font-orbitron font-black text-white tracking-tight uppercase glitch-text" data-text="AARAV // HKSAARAV">
+            AARAV <span class="text-transparent bg-clip-text bg-gradient-to-r from-ghostRed via-taskAmber to-cyberCyan">// HKSAARAV</span>
           </h1>
-
-          <p class="text-lg text-slate-300 max-w-2xl font-rajdhani font-semibold leading-relaxed">
-            Frontline Entry Fragger and tactical Squad Leader. 4+ years dominating across 
-            <span class="text-tactical-accent font-bold">COD: Warzone</span>, 
-            <span class="text-emerald-400 font-bold">Call of Duty Mobile</span>, and 
-            <span class="text-tactical-crimson font-bold">Valorant</span>. Specializing in silent stealth rotations, lethal submachine CQB with the <span class="text-tactical-amber font-bold">Static-HV</span>, and cold 1vX clutch executions.
+          <p class="font-mono text-xs sm:text-sm text-slate-300 tracking-[0.25em] uppercase mt-2">
+            TASK FORCE 141 &bull; VALORANT &bull; WARZONE &bull; CODM SPECIALIST
           </p>
+        </div>
 
-          <!-- Quick Copy ID & Discord Comms Bar -->
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-            <!-- IGN Card -->
-            <div class="hud-border bg-tactical-panel/90 p-3.5 rounded flex items-center justify-between">
-              <div>
-                <div class="text-[10px] font-mono text-slate-400 tracking-wider">TACTICAL IGN</div>
-                <div class="text-base font-orbitron font-bold text-white tracking-wider" id="ignText">HKSAARAV</div>
-              </div>
-              <button onclick="copyToClipboard('HKSAARAV', 'IGN HKSAARAV Copied to Clipboard!')" class="p-2 rounded bg-tactical-border/60 hover:bg-tactical-accent hover:text-black text-tactical-accent transition" title="Copy IGN">
-                <i class="fa-regular fa-clone"></i>
-              </button>
-            </div>
-
-            <!-- UID Card -->
-            <div class="hud-border bg-tactical-panel/90 p-3.5 rounded flex items-center justify-between">
-              <div>
-                <div class="text-[10px] font-mono text-slate-400 tracking-wider">OPERATOR UID</div>
-                <div class="text-xs font-mono font-bold text-tactical-accent truncate max-w-[110px]" id="uidText" title="7422543457833123842">
-                  7422543457833123842
-                </div>
-              </div>
-              <button onclick="copyToClipboard('7422543457833123842', 'UID Copied to Clipboard!')" class="p-2 rounded bg-tactical-border/60 hover:bg-tactical-accent hover:text-black text-tactical-accent transition" title="Copy UID">
-                <i class="fa-regular fa-clone"></i>
-              </button>
-            </div>
-
-            <!-- Discord Card with Direct Link -->
-            <div class="hud-border bg-tactical-panel/90 p-3.5 rounded flex items-center justify-between border-[#5865F2]/40 hover:border-[#5865F2] transition">
-              <div>
-                <div class="text-[10px] font-mono text-[#5865F2] tracking-wider font-bold flex items-center gap-1">
-                  <i class="fa-brands fa-discord"></i> DISCORD COMMS
-                </div>
-                <div class="text-xs font-mono font-bold text-white truncate max-w-[100px]" id="discordUsernameDisplay">
-                  Aarav.55
-                </div>
-              </div>
-              <div class="flex items-center gap-1">
-                <button onclick="copyDiscordHandle()" title="Direct DM / Open Discord" class="p-2 rounded bg-[#5865F2]/20 hover:bg-[#5865F2] text-[#5865F2] hover:text-white transition">
-                  <i class="fa-solid fa-paper-plane"></i>
-                </button>
-                <button onclick="copyDiscordHandle()" title="Copy Discord Tag" class="p-2 rounded bg-tactical-border/60 hover:bg-tactical-accent hover:text-black text-tactical-accent transition">
-                  <i class="fa-regular fa-clone"></i>
-                </button>
-              </div>
-            </div>
+        <!-- Operator Philosophy Quote Card -->
+        <div class="relative bg-panelCharcoal/95 border-l-4 border-ghostRed p-5 rounded-r-xl border-y border-r border-white/10 shadow-2xl backdrop-blur group">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] font-mono text-ghostRed uppercase tracking-widest font-bold">
+              <i class="fa-solid fa-radio mr-1"></i> INTERCEPTED AUDIO LOG // TASK FORCE 141
+            </span>
+            <button onclick="playGhostQuoteAudio()" class="text-xs text-taskAmber hover:text-white font-mono flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-play text-[10px]"></i> TRANSMIT LOG
+            </button>
           </div>
-
-          <!-- Hero Action CTAs -->
-          <div class="flex flex-wrap gap-4 pt-2">
-            <a href="#armory" class="px-6 py-3 rounded font-orbitron font-bold text-sm tracking-wider bg-tactical-accent text-black hover:bg-cyan-300 transition-all shadow-neonCyan flex items-center gap-2">
-              <i class="fa-solid fa-gun"></i> INSPECT STATIC-HV
-            </a>
-            <button onclick="copyDiscordHandle()" class="px-6 py-3 rounded font-orbitron font-bold text-sm tracking-wider bg-[#5865F2] text-white hover:bg-[#4752C4] transition-all shadow-lg flex items-center gap-2">
-              <i class="fa-brands fa-discord text-base"></i> DIRECT DISCORD DM
-            </button>
-            <button onclick="openModal('recruitmentModal')" class="px-5 py-3 rounded font-orbitron font-bold text-sm tracking-wider bg-tactical-panel border border-tactical-accent/40 text-slate-200 hover:border-tactical-accent hover:text-tactical-accent transition-all flex items-center gap-2">
-              <i class="fa-solid fa-shield-halved"></i> SQUAD RECRUIT
-            </button>
+          <p class="font-syne text-xl sm:text-2xl font-bold text-white italic tracking-wide">
+            “Do you have a heart? — A cold one.”
+          </p>
+          <div class="mt-3 flex items-center justify-between text-xs font-mono text-slate-400">
+            <span>&mdash; SIMON "GHOST" RILEY // HKSAARAV</span>
+            <span class="text-taskAmber font-bold">“CHOICES HAVE CONSEQUENCES”</span>
           </div>
         </div>
 
-        <!-- Right Hero Column: Interactive Operator Badge Card -->
-        <div class="lg:col-span-5 flex justify-center">
-          <div class="relative w-full max-w-md">
-            <!-- Neon background pulse glow -->
-            <div class="absolute -inset-1 bg-gradient-to-r from-tactical-accent via-tactical-crimson to-emerald-500 rounded-2xl blur-lg opacity-30 group-hover:opacity-60 transition duration-1000"></div>
+        <!-- Instant Copy Tactical Cards: IGN, UID, Discord Tag -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+          
+          <!-- In-Game Name Card -->
+          <div class="bg-panelCharcoal/90 border border-white/10 hover:border-ghostRed rounded-xl p-3.5 transition group">
+            <div class="flex justify-between items-center text-[10px] font-mono text-slate-400">
+              <span>CALLSIGN / IGN</span>
+              <i class="fa-solid fa-id-badge text-ghostRed group-hover:rotate-12 transition"></i>
+            </div>
+            <div class="font-orbitron text-sm font-extrabold text-white mt-1.5 truncate">
+              HKSAARAV
+            </div>
+            <button onclick="copyData('HKSAARAV', 'IGN HKSAARAV Copied!')" class="mt-2.5 w-full py-1 text-[11px] font-mono bg-white/5 hover:bg-ghostRed hover:text-white rounded border border-white/10 transition flex items-center justify-center gap-1.5 text-slate-300">
+              <i class="fa-regular fa-copy"></i> COPY IGN
+            </button>
+          </div>
 
-            <div class="relative hud-border rounded-xl bg-tactical-dark p-6 space-y-5 border-2 border-tactical-border">
-              <!-- Top Card Header with Military Stencil -->
-              <div class="flex justify-between items-center border-b border-tactical-border pb-3">
-                <div class="flex items-center gap-2">
-                  <span class="inline-block w-2.5 h-2.5 rounded-full bg-tactical-crimson animate-pulse"></span>
-                  <span class="font-mono text-xs text-tactical-crimson font-bold uppercase tracking-widest">TASK FORCE 141 // ACTIVE</span>
+          <!-- CODM UID Card -->
+          <div class="bg-panelCharcoal/90 border border-white/10 hover:border-taskAmber rounded-xl p-3.5 transition group">
+            <div class="flex justify-between items-center text-[10px] font-mono text-slate-400">
+              <span>CODM UID</span>
+              <i class="fa-solid fa-fingerprint text-taskAmber"></i>
+            </div>
+            <div class="font-mono text-xs font-bold text-white mt-1.5 truncate select-all" title="7422543457833123842">
+              7422543457833123842
+            </div>
+            <button onclick="copyData('7422543457833123842', 'Aarav\'s UID Copied!')" class="mt-2.5 w-full py-1 text-[11px] font-mono bg-white/5 hover:bg-taskAmber hover:text-black rounded border border-white/10 transition flex items-center justify-center gap-1.5 text-slate-300">
+              <i class="fa-regular fa-copy"></i> COPY UID
+            </button>
+          </div>
+
+          <!-- Discord User Card -->
+          <div class="bg-panelCharcoal/90 border border-white/10 hover:border-[#5865F2] rounded-xl p-3.5 transition group">
+            <div class="flex justify-between items-center text-[10px] font-mono text-slate-400">
+              <span>DISCORD COMMS</span>
+              <i class="fa-brands fa-discord text-[#5865F2]"></i>
+            </div>
+            <div class="font-mono text-xs font-bold text-white mt-1.5 truncate">
+              Aarav.55
+            </div>
+            <button onclick="copyData('Aarav.55', 'Discord Aarav.55 Copied!')" class="mt-2.5 w-full py-1 text-[11px] font-mono bg-white/5 hover:bg-[#5865F2] hover:text-white rounded border border-white/10 transition flex items-center justify-center gap-1.5 text-slate-300">
+              <i class="fa-regular fa-copy"></i> COPY TAG
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="https://discordapp.com/users/Aarav.55" target="_blank" rel="noopener noreferrer" class="bevel-btn px-6 py-3.5 bg-ghostRed hover:bg-red-600 text-white font-orbitron font-bold text-xs tracking-wider transition-all shadow-neonRed flex items-center gap-2">
+            <i class="fa-brands fa-discord text-base"></i> OPEN DISCORD DM
+          </a>
+          <a href="#arsenal" class="bevel-btn px-6 py-3.5 bg-panelCharcoal border border-taskAmber/60 hover:bg-taskAmber/20 text-taskAmber font-orbitron font-bold text-xs tracking-wider transition shadow-amberGlow flex items-center gap-2">
+            <i class="fa-solid fa-gun"></i> STATIC-HV WORKBENCH
+          </a>
+          <a href="#aimlab" class="bevel-btn px-5 py-3.5 bg-panelCharcoal border border-nvgGreen/50 hover:border-nvgGreen text-nvgGreen font-mono text-xs font-bold tracking-wider transition flex items-center gap-2">
+            <i class="fa-solid fa-crosshairs"></i> CALIBRATE AIM
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Featured Ghost Poster (18217.png with 3D Tilt) -->
+      <div class="lg:col-span-5 flex justify-center card-3d-wrap">
+        <div class="card-3d w-full max-w-md relative" id="heroPosterCard">
+          
+          <!-- Outer Pulsing Ambient Border -->
+          <div class="absolute -inset-1.5 bg-gradient-to-r from-ghostRed via-taskAmber to-cyberCyan rounded-2xl blur-lg opacity-40 animate-pulse"></div>
+
+          <div class="relative bg-matrixBlack rounded-2xl border-2 border-white/20 overflow-hidden shadow-2xl">
+            
+            <!-- Terminal Header Top Bar -->
+            <div class="bg-panelCharcoal px-4 py-2.5 border-b border-white/10 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-ghostRed animate-ping"></span>
+                <span class="font-mono text-xs font-bold text-ghostRed">OPERATOR: GHOST // SIMON RILEY</span>
+              </div>
+              <span class="font-mono text-[10px] text-taskAmber bg-black/60 px-2 py-0.5 rounded border border-taskAmber/40">
+                TASK FORCE 141
+              </span>
+            </div>
+
+            <!-- Ghost Poster Image Container (18217.png with fallback) -->
+            <div class="relative w-full aspect-[9/15] bg-black overflow-hidden group cursor-pointer" onclick="openLightbox('18217.png', 'GHOST SIMON RILEY // SAS SPECIAL AIR SERVICE')">
+              <img 
+                id="mainPosterImg"
+                src="18217.png" 
+                alt="Simon Riley Ghost Poster" 
+                class="w-full h-full object-cover object-top filter contrast-125 brightness-95 group-hover:scale-105 transition-transform duration-700"
+                onerror="handleImgFallback(this, ['18217.jpg', '8277.png', 'https://placehold.co/600x1000/0d0e14/e61937?text=GHOST+SIMON+RILEY'])"
+              />
+
+              <!-- Overlay HUD Gradients -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30 pointer-events-none"></div>
+
+              <!-- Top Left Reticle Coordinates -->
+              <div class="absolute top-4 left-4 font-mono text-[10px] text-ghostRed/90 bg-black/80 px-2.5 py-1 rounded border border-ghostRed/50">
+                <i class="fa-solid fa-location-crosshairs mr-1"></i>31.1471° N, 75.3412° E
+              </div>
+
+              <!-- Top Right Zoom Prompt -->
+              <div class="absolute top-4 right-4 font-mono text-[10px] text-white/80 bg-black/80 px-2 py-1 rounded border border-white/20 group-hover:border-taskAmber transition">
+                <i class="fa-solid fa-magnifying-glass-plus mr-1"></i>ENLARGE
+              </div>
+
+              <!-- Bottom Floating Tag Badge -->
+              <div class="absolute bottom-4 left-4 right-4 bg-black/90 backdrop-blur-md p-3.5 rounded-xl border border-taskAmber/50 flex items-center justify-between shadow-2xl">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg overflow-hidden border border-ghostRed/60 bg-panelCharcoal flex items-center justify-center text-ghostRed text-lg">
+                    <i class="fa-solid fa-skull"></i>
+                  </div>
+                  <div>
+                    <span class="font-orbitron font-black text-sm text-white block">SIMON "GHOST" RILEY</span>
+                    <span class="font-mono text-[10px] text-taskAmber font-bold tracking-wider">SPECIAL AIR SERVICE (SAS)</span>
+                  </div>
                 </div>
-                <span class="font-mono text-[10px] text-slate-400 bg-tactical-black px-2 py-0.5 rounded border border-tactical-border">
-                  SEC-LEVEL: REDACTED
+                <span class="px-2 py-1 bg-ghostRed/20 text-ghostRed text-[10px] font-mono font-bold rounded border border-ghostRed animate-pulse">
+                  ACTIVE
                 </span>
               </div>
 
-              <!-- Skull Crest Visual Motif -->
-              <div class="relative py-6 flex flex-col items-center justify-center bg-tactical-panel/80 rounded-lg border border-tactical-border/80">
-                <!-- Rotating Radar Ring -->
-                <div class="absolute w-44 h-44 rounded-full border border-tactical-accent/20 flex items-center justify-center">
-                  <div class="w-full h-0.5 bg-gradient-to-r from-tactical-accent/60 to-transparent animate-radar origin-center"></div>
-                </div>
-
-                <div class="relative z-10 text-center">
-                  <div class="w-24 h-24 mx-auto mb-3 rounded-full bg-tactical-black border-2 border-tactical-accent/70 flex items-center justify-center text-tactical-skull shadow-neonCyan">
-                    <!-- Stylized Skull Icon -->
-                    <i class="fa-solid fa-skull text-5xl text-slate-100"></i>
-                  </div>
-                  <h3 class="font-orbitron font-black text-2xl text-white tracking-widest">SIMON "GHOST" RILEY</h3>
-                  <p class="font-mono text-xs text-tactical-accent tracking-widest mt-0.5">OPERATOR CODENAME: GHOST</p>
-                </div>
-              </div>
-
-              <!-- Military Dog Tag & Spec Box -->
-              <div class="grid grid-cols-3 gap-2 text-center font-mono">
-                <div class="bg-tactical-panel p-2 rounded border border-tactical-border/80">
-                  <span class="text-[10px] text-slate-400 block">K/D COMBAT</span>
-                  <span class="text-tactical-accent font-orbitron font-bold text-lg">2.00</span>
-                </div>
-                <div class="bg-tactical-panel p-2 rounded border border-tactical-border/80">
-                  <span class="text-[10px] text-slate-400 block">SERVICE</span>
-                  <span class="text-white font-orbitron font-bold text-lg">4+ YRS</span>
-                </div>
-                <div class="bg-tactical-panel p-2 rounded border border-tactical-border/80">
-                  <span class="text-[10px] text-slate-400 block">WEAPON SPEC</span>
-                  <span class="text-tactical-amber font-orbitron font-bold text-xs leading-7">STATIC-HV</span>
-                </div>
-              </div>
-
-              <!-- Military Stencil Footer Quote -->
-              <div class="bg-black/60 p-2.5 rounded border border-tactical-border flex items-center justify-between text-xs font-mono text-slate-400">
-                <span class="text-tactical-crimson font-bold"><i class="fa-solid fa-fingerprint"></i> AUTH: 141-GHOST</span>
-                <span class="italic">"Bravo Six, going dark."</span>
-              </div>
             </div>
+
+            <!-- Poster Bottom Intelligence Ticker -->
+            <div class="bg-panelCharcoal px-4 py-2 border-t border-white/10 font-mono text-[11px] text-slate-400 flex justify-between items-center">
+              <span>SPECIAL OPS CLASSIFIED INTEL</span>
+              <span class="text-nvgGreen font-bold">MIL-SPEC VERIFIED</span>
+            </div>
+
           </div>
         </div>
-
       </div>
+
     </div>
   </header>
 
-  <section id="dossier" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-tactical-border/40">
-    <div class="flex items-center space-x-3 mb-8">
-      <div class="h-6 w-1 bg-tactical-accent"></div>
-      <h2 class="text-2xl font-orbitron font-bold text-white tracking-wide uppercase">01 // COMBAT METRICS & DOSSIER</h2>
+  <section id="dossier" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-white/10">
+    <div class="flex items-center justify-between mb-8">
+      <div class="flex items-center space-x-3">
+        <div class="h-8 w-1.5 bg-ghostRed"></div>
+        <h2 class="text-2xl sm:text-3xl font-orbitron font-extrabold text-white tracking-wider uppercase">
+          01 // DOSSIER & COMBAT TELEMETRY
+        </h2>
+      </div>
+      <span class="font-mono text-xs text-taskAmber hidden sm:inline">DATA_STREAM // VERIFIED BY ACTIVISION</span>
     </div>
 
-    <!-- Stats Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <!-- Metric 1: K/D -->
-      <div class="hud-border bg-tactical-panel/80 p-5 rounded-lg">
+      
+      <!-- Metric: KD Ratio 2.00 -->
+      <div class="bg-panelCharcoal/90 border border-ghostRed/40 hover:border-ghostRed p-6 rounded-2xl relative overflow-hidden transition group hover:-translate-y-1">
         <div class="flex justify-between items-start">
-          <span class="font-mono text-xs text-slate-400">KILL / DEATH RATIO</span>
-          <i class="fa-solid fa-crosshairs text-tactical-accent text-lg"></i>
+          <span class="font-mono text-xs text-slate-400 tracking-wider">KILL / DEATH RATIO</span>
+          <div class="w-8 h-8 rounded-lg bg-ghostRed/20 border border-ghostRed flex items-center justify-center text-ghostRed">
+            <i class="fa-solid fa-skull"></i>
+          </div>
         </div>
-        <div class="mt-3 flex items-baseline gap-2">
-          <span class="text-4xl font-orbitron font-black text-white counter" data-target="2.00">0.00</span>
-          <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">ELITE TIER</span>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-4xl font-orbitron font-black text-white stat-counter" data-target="2.00">0.00</span>
+          <span class="text-xs font-mono text-nvgGreen bg-nvgGreen/15 px-2 py-0.5 rounded border border-nvgGreen/40 font-bold">
+            COMPETITIVE
+          </span>
         </div>
-        <p class="text-xs text-slate-400 mt-2 font-mono">Consistently holds a verified 2.00+ KD in multi-player & BR lobbies.</p>
+        <p class="text-xs text-slate-400 mt-2 font-mono">Precision frag rate across high-tier ranked lobbies and scrimmage tournaments.</p>
+        <div class="w-full bg-black h-1.5 mt-4 rounded-full overflow-hidden">
+          <div class="bg-ghostRed h-full w-[85%]"></div>
+        </div>
       </div>
 
-      <!-- Metric 2: Combat Tenure -->
-      <div class="hud-border bg-tactical-panel/80 p-5 rounded-lg">
+      <!-- Metric: 4 Years Experience -->
+      <div class="bg-panelCharcoal/90 border border-taskAmber/40 hover:border-taskAmber p-6 rounded-2xl relative overflow-hidden transition group hover:-translate-y-1">
         <div class="flex justify-between items-start">
-          <span class="font-mono text-xs text-slate-400">OPERATIONAL TENURE</span>
-          <i class="fa-solid fa-clock-rotate-left text-tactical-amber text-lg"></i>
+          <span class="font-mono text-xs text-slate-400 tracking-wider">COMBAT VETERAN</span>
+          <div class="w-8 h-8 rounded-lg bg-taskAmber/20 border border-taskAmber flex items-center justify-center text-taskAmber">
+            <i class="fa-solid fa-hourglass-half"></i>
+          </div>
         </div>
-        <div class="mt-3 flex items-baseline gap-2">
-          <span class="text-4xl font-orbitron font-black text-white counter" data-target="4">0</span>
-          <span class="text-2xl font-orbitron font-bold text-tactical-amber">+</span>
-          <span class="text-xs font-mono text-tactical-amber bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">YEARS</span>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-4xl font-orbitron font-black text-white stat-counter" data-target="4">0</span>
+          <span class="text-xl font-orbitron font-bold text-taskAmber">YEARS</span>
         </div>
-        <p class="text-xs text-slate-400 mt-2 font-mono">Continuous competitive play across PC and Mobile platforms since 2020.</p>
+        <p class="text-xs text-slate-400 mt-2 font-mono">Proven operational tenure across Valorant, Warzone, and CODM ranked circuits.</p>
+        <div class="w-full bg-black h-1.5 mt-4 rounded-full overflow-hidden">
+          <div class="bg-taskAmber h-full w-[95%]"></div>
+        </div>
       </div>
 
-      <!-- Metric 3: Headshot Accuracy -->
-      <div class="hud-border bg-tactical-panel/80 p-5 rounded-lg">
+      <!-- Metric: Primary Weapon Static-HV -->
+      <div class="bg-panelCharcoal/90 border border-cyberCyan/40 hover:border-cyberCyan p-6 rounded-2xl relative overflow-hidden transition group hover:-translate-y-1">
         <div class="flex justify-between items-start">
-          <span class="font-mono text-xs text-slate-400">HEADSHOT ACCURACY</span>
-          <i class="fa-solid fa-bullseye text-tactical-crimson text-lg"></i>
+          <span class="font-mono text-xs text-slate-400 tracking-wider">PRIMARY ARSENAL</span>
+          <div class="w-8 h-8 rounded-lg bg-cyberCyan/20 border border-cyberCyan flex items-center justify-center text-cyberCyan">
+            <i class="fa-solid fa-gun"></i>
+          </div>
         </div>
-        <div class="mt-3 flex items-baseline gap-2">
-          <span class="text-4xl font-orbitron font-black text-white counter" data-target="36.8">0</span>
-          <span class="text-xl font-orbitron font-bold text-tactical-crimson">%</span>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-3xl font-orbitron font-black text-white">STATIC</span>
+          <span class="text-lg font-orbitron font-bold text-cyberCyan">-HV</span>
         </div>
-        <p class="text-xs text-slate-400 mt-2 font-mono">High precision burst control especially in close-to-mid range gunfights.</p>
+        <p class="text-xs text-slate-400 mt-2 font-mono">High-cadence CQB submachine gun configured for hyper-mobility and recoil control.</p>
+        <div class="w-full bg-black h-1.5 mt-4 rounded-full overflow-hidden">
+          <div class="bg-cyberCyan h-full w-[90%]"></div>
+        </div>
       </div>
 
-      <!-- Metric 4: Win Ratio -->
-      <div class="hud-border bg-tactical-panel/80 p-5 rounded-lg">
+      <!-- Metric: Operational Efficiency -->
+      <div class="bg-panelCharcoal/90 border border-nvgGreen/40 hover:border-nvgGreen p-6 rounded-2xl relative overflow-hidden transition group hover:-translate-y-1">
         <div class="flex justify-between items-start">
-          <span class="font-mono text-xs text-slate-400">SQUAD WIN RATE</span>
-          <i class="fa-solid fa-trophy text-tactical-accent text-lg"></i>
+          <span class="font-mono text-xs text-slate-400 tracking-wider">CLUTCH / SQUAD WIN RATE</span>
+          <div class="w-8 h-8 rounded-lg bg-nvgGreen/20 border border-nvgGreen flex items-center justify-center text-nvgGreen">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
         </div>
-        <div class="mt-3 flex items-baseline gap-2">
-          <span class="text-4xl font-orbitron font-black text-white counter" data-target="68.2">0</span>
-          <span class="text-xl font-orbitron font-bold text-tactical-accent">%</span>
+        <div class="mt-4 flex items-baseline gap-2">
+          <span class="text-4xl font-orbitron font-black text-white stat-counter" data-target="78.5">0</span>
+          <span class="text-xl font-orbitron font-bold text-nvgGreen">%</span>
         </div>
-        <p class="text-xs text-slate-400 mt-2 font-mono">Battle Royale top-tier finishes and Ranked Domination streaks.</p>
+        <p class="text-xs text-slate-400 mt-2 font-mono">Dominating 1vX defuses, trade frags, and aggressive entry pushes in S&D.</p>
+        <div class="w-full bg-black h-1.5 mt-4 rounded-full overflow-hidden">
+          <div class="bg-nvgGreen h-full w-[80%]"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="arsenal" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-white/10">
+    <div class="flex items-center space-x-3 mb-8">
+      <div class="h-8 w-1.5 bg-taskAmber"></div>
+      <h2 class="text-2xl sm:text-3xl font-orbitron font-extrabold text-white tracking-wider uppercase">
+        02 // ARSENAL WORKBENCH &bull; STATIC-HV INSPECTION
+      </h2>
+    </div>
+
+    <div class="bg-gradient-to-br from-panelCharcoal via-matrixBlack to-black border-2 border-taskAmber/50 rounded-2xl p-6 sm:p-10 relative overflow-hidden shadow-amberGlow">
+      
+      <!-- Hazard Striping Accent Header -->
+      <div class="h-3 w-full hazard-stripes mb-6 rounded"></div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Left: Static-HV Gunsmith Specs -->
+        <div class="lg:col-span-7 space-y-5">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-taskAmber/20 border border-taskAmber text-taskAmber font-mono text-xs font-bold">
+            <i class="fa-solid fa-screwdriver-wrench"></i> SIGNATURE WEAPON CONFIGURATION
+          </div>
+
+          <h3 class="text-3xl sm:text-4xl font-orbitron font-black text-white leading-tight">
+            STATIC-HV SUBMACHINE GUN
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-taskAmber via-yellow-200 to-ghostRed block">
+              CLOSE-QUARTERS ENTRY SLAYER
+            </span>
+          </h3>
+
+          <p class="text-slate-300 font-chakra text-lg leading-relaxed">
+            Aarav's lethal primary weapon of choice. Built for explosive sprint-to-fire speed, pinpoint horizontal recoil stabilization, and devastating close-range time-to-kill (TTK). Perfect for punishing corner peeks and wiping entire squads.
+          </p>
+
+          <!-- Gunsmith Telemetry Stats Bars -->
+          <div class="space-y-3 font-mono text-xs">
+            <div>
+              <div class="flex justify-between text-slate-300 mb-1">
+                <span>FIRE RATE (RPM)</span>
+                <span class="text-taskAmber font-bold">882 RPM [MAX TIER]</span>
+              </div>
+              <div class="w-full bg-black/80 h-2 rounded-full overflow-hidden border border-white/10">
+                <div class="bg-gradient-to-r from-taskAmber to-yellow-400 h-full w-[88%]"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-300 mb-1">
+                <span>MOBILITY & ADS SPRINT SPEED</span>
+                <span class="text-nvgGreen font-bold">94% AGILITY</span>
+              </div>
+              <div class="w-full bg-black/80 h-2 rounded-full overflow-hidden border border-white/10">
+                <div class="bg-gradient-to-r from-nvgGreen to-emerald-400 h-full w-[94%]"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-300 mb-1">
+                <span>DAMAGE / TTK EFFICIENCY</span>
+                <span class="text-ghostRed font-bold">EXTREME (210ms)</span>
+              </div>
+              <div class="w-full bg-black/80 h-2 rounded-full overflow-hidden border border-white/10">
+                <div class="bg-gradient-to-r from-ghostRed to-red-500 h-full w-[91%]"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-300 mb-1">
+                <span>RECOIL STABILIZATION</span>
+                <span class="text-cyberCyan font-bold">COMPENSATED BORE</span>
+              </div>
+              <div class="w-full bg-black/80 h-2 rounded-full overflow-hidden border border-white/10">
+                <div class="bg-gradient-to-r from-cyberCyan to-blue-400 h-full w-[84%]"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gun Audio Trigger & Config Buttons -->
+          <div class="pt-3 flex flex-wrap gap-3">
+            <button onclick="fireStaticHVBurst()" class="bevel-btn px-6 py-3.5 bg-taskAmber hover:bg-yellow-400 text-black font-orbitron font-black text-xs tracking-wider transition shadow-lg flex items-center gap-2">
+              <i class="fa-solid fa-volume-high"></i> TEST FIRE STATIC-HV BURST
+            </button>
+            <button onclick="copyData('STATIC-HV: Tactical Suppressor, FSS OLE-V Laser, 50-Round Drum, Skeleton Stock, Granulated Grip', 'Gunsmith Loadout Copied!')" class="bevel-btn px-4 py-3.5 bg-black/70 border border-white/20 hover:border-taskAmber text-slate-200 hover:text-white font-mono text-xs transition flex items-center gap-2">
+              <i class="fa-regular fa-copy"></i> COPY LOADOUT CODE
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Right: Static-HV Gun Schematic Display Card -->
+        <div class="lg:col-span-5">
+          <div class="bg-black/90 border-2 border-taskAmber/60 rounded-2xl p-6 relative overflow-hidden group">
+            
+            <div class="flex justify-between items-center text-xs font-mono text-taskAmber border-b border-white/10 pb-3 mb-4">
+              <span><i class="fa-solid fa-microchip mr-1"></i>CALIBER: 5.7x28MM</span>
+              <span class="text-slate-400">CLASS: SUBMACHINE GUN</span>
+            </div>
+
+            <!-- Stylized Tactical Gun Reticle Visual Graphic -->
+            <div class="relative py-12 flex flex-col items-center justify-center border border-taskAmber/20 rounded-xl bg-panelCharcoal/50">
+              <div class="w-24 h-24 rounded-full border-2 border-dashed border-taskAmber/50 flex items-center justify-center animate-spin" style="animation-duration: 25s;">
+                <div class="w-16 h-16 rounded-full border border-ghostRed flex items-center justify-center">
+                  <i class="fa-solid fa-gun text-3xl text-taskAmber"></i>
+                </div>
+              </div>
+              <h4 class="font-orbitron font-extrabold text-xl text-white mt-4 tracking-wider">STATIC-HV // SPEC-OPS</h4>
+              <p class="font-mono text-xs text-slate-400 mt-1">OPERATOR SIGNATURE GUN</p>
+              
+              <!-- Realtime Fire Flash Visual Effect -->
+              <div id="muzzleFlash" class="absolute inset-0 bg-yellow-400/20 opacity-0 pointer-events-none rounded-xl transition-opacity duration-75"></div>
+            </div>
+
+            <!-- Attachments Blueprint List -->
+            <div class="grid grid-cols-2 gap-2 mt-4 text-[11px] font-mono">
+              <div class="bg-panelCharcoal p-2.5 rounded border border-white/10">
+                <span class="text-slate-400 block text-[9px]">MUZZLE</span>
+                <span class="text-white font-bold">TACTICAL COMPENSATOR</span>
+              </div>
+              <div class="bg-panelCharcoal p-2.5 rounded border border-white/10">
+                <span class="text-slate-400 block text-[9px]">MAGAZINE</span>
+                <span class="text-taskAmber font-bold">50 ROUND DRUM</span>
+              </div>
+              <div class="bg-panelCharcoal p-2.5 rounded border border-white/10">
+                <span class="text-slate-400 block text-[9px]">STOCK</span>
+                <span class="text-white font-bold">LIGHTWEIGHT SKELETON</span>
+              </div>
+              <div class="bg-panelCharcoal p-2.5 rounded border border-white/10">
+                <span class="text-slate-400 block text-[9px]">REAR GRIP</span>
+                <span class="text-nvgGreen font-bold">GRANULATED STIPPLED</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <section id="operator" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-tactical-border/40">
-    <div class="flex items-center space-x-3 mb-8">
-      <div class="h-6 w-1 bg-tactical-crimson"></div>
-      <h2 class="text-2xl font-orbitron font-bold text-white tracking-wide uppercase">02 // OPERATOR RECON: GHOST</h2>
+  <section id="archives" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-white/10">
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+      <div class="flex items-center space-x-3">
+        <div class="h-8 w-1.5 bg-ghostRed"></div>
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-orbitron font-extrabold text-white tracking-wider uppercase">
+            03 // GHOST INTELLIGENCE ARCHIVES
+          </h2>
+          <p class="font-mono text-xs text-slate-400 mt-0.5">Click any tactical visual intelligence file to inspect high-resolution combat telemetry.</p>
+        </div>
+      </div>
+      <span class="px-3 py-1 rounded bg-ghostRed/20 border border-ghostRed text-ghostRed font-mono text-xs font-bold">
+        5 ASSETS DECLASSIFIED
+      </span>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-      <!-- Left Column: Operator Bio Card -->
-      <div class="lg:col-span-6 hud-border bg-tactical-dark p-6 sm:p-8 rounded-xl space-y-6">
-        <div class="flex items-center justify-between border-b border-tactical-border pb-4">
-          <div>
-            <span class="text-xs font-mono text-tactical-crimson tracking-widest font-bold">LEGENDARY OPERATOR</span>
-            <h3 class="text-3xl font-orbitron font-black text-white">SIMON "GHOST" RILEY</h3>
-          </div>
-          <span class="px-3 py-1 rounded bg-tactical-crimson/10 border border-tactical-crimson/40 text-tactical-crimson font-mono text-xs font-bold">
-            TIER 1 CLASSIFIED
-          </span>
-        </div>
-
-        <p class="text-slate-300 font-rajdhani text-lg leading-relaxed">
-          Ghost represents the pinnacle of silent assault and psychological warfare. In Aarav's playbook, Ghost isn't just an avatar skin—it dictates an aggressive yet stealthy tactical positioning: flanking enemy sightlines, cutting off rotations, and striking when least anticipated.
-        </p>
-
-        <!-- Ghost's In-Game Perks / Tactical Attributes -->
-        <div class="space-y-3">
-          <div class="bg-tactical-panel/70 p-3 rounded border border-tactical-border/70 flex items-center gap-3">
-            <div class="w-8 h-8 rounded bg-tactical-crimson/20 border border-tactical-crimson/40 flex items-center justify-center text-tactical-crimson">
-              <i class="fa-solid fa-ghost"></i>
-            </div>
-            <div>
-              <div class="font-orbitron text-sm font-bold text-white">Cold-Blooded / Ghost Passive</div>
-              <div class="text-xs font-mono text-slate-400">Undetectable by thermal optics, radar drones, and heartbeat sensors.</div>
-            </div>
+    <!-- Gallery Grid with all provided Ghost images -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      
+      <!-- Card 1: 18225 - "CHOICES HAVE CONSEQUENCES" / Task Force 141 Collage -->
+      <div class="lg:col-span-2 bg-panelCharcoal rounded-2xl border-2 border-ghostRed/50 overflow-hidden shadow-2xl group cursor-pointer relative" onclick="openLightbox('18225.png', 'TASK FORCE 141 // CHOICES HAVE CONSEQUENCES')">
+        <div class="relative w-full aspect-[16/11] overflow-hidden bg-black">
+          <img 
+            src="18225.png" 
+            alt="Task Force 141 Ghost Manhattan" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95"
+            onerror="handleImgFallback(this, ['18225.jpg', 'https://placehold.co/800x600/0d0e14/e61937?text=CHOICES+HAVE+CONSEQUENCES'])"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30"></div>
+          
+          <div class="absolute top-3 left-3 bg-black/85 px-3 py-1 rounded text-ghostRed font-mono text-[10px] font-bold border border-ghostRed/50">
+            <i class="fa-solid fa-triangle-exclamation mr-1"></i>TASK FORCE 141 // MANHATTAN
           </div>
 
-          <div class="bg-tactical-panel/70 p-3 rounded border border-tactical-border/70 flex items-center gap-3">
-            <div class="w-8 h-8 rounded bg-tactical-accent/20 border border-tactical-accent/40 flex items-center justify-center text-tactical-accent">
-              <i class="fa-solid fa-shoe-prints"></i>
-            </div>
+          <div class="absolute bottom-3 left-3 right-3 bg-black/85 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between">
             <div>
-              <div class="font-orbitron text-sm font-bold text-white">Dead Silence / Covert Sprint</div>
-              <div class="text-xs font-mono text-slate-400">Silent footsteps for lightning-fast submachine room breaches.</div>
+              <span class="font-orbitron font-bold text-white text-sm block">“CHOICES HAVE CONSEQUENCES”</span>
+              <span class="font-mono text-[10px] text-taskAmber">SCHQ BO-7 &bull; SPECIAL AIR SERVICE</span>
             </div>
-          </div>
-
-          <div class="bg-tactical-panel/70 p-3 rounded border border-tactical-border/70 flex items-center gap-3">
-            <div class="w-8 h-8 rounded bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
-              <i class="fa-solid fa-bolt"></i>
-            </div>
-            <div>
-              <div class="font-orbitron text-sm font-bold text-white">High Alert / Situational Radar</div>
-              <div class="text-xs font-mono text-slate-400">Instant visual pulsation when targeted outside normal FOV.</div>
-            </div>
+            <span class="text-xs text-cyberCyan font-mono"><i class="fa-solid fa-expand"></i></span>
           </div>
         </div>
+      </div>
 
-        <!-- Audio Interactive Quote Button -->
-        <div class="pt-2">
-          <button onclick="playOperatorVoiceline()" class="w-full py-3 rounded bg-tactical-panel border border-tactical-border hover:border-tactical-crimson text-slate-200 hover:text-tactical-crimson transition font-mono text-sm flex items-center justify-center gap-2">
-            <i class="fa-solid fa-radio"></i> TRANSMIT OPERATOR FREQUENCY [AUDIO]
+      <!-- Card 2: 18222 - Soap & Ghost Golden Blade Split Profile -->
+      <div class="lg:col-span-2 bg-panelCharcoal rounded-2xl border-2 border-taskAmber/50 overflow-hidden shadow-2xl group cursor-pointer relative" onclick="openLightbox('18222.png', 'BROTHERHOOD & WAR // SOAP & GHOST DUAL SPLIT')">
+        <div class="relative w-full aspect-[16/11] overflow-hidden bg-black">
+          <img 
+            src="18222.png" 
+            alt="Soap and Ghost Golden Split" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95"
+            onerror="handleImgFallback(this, ['18222.jpg', 'https://placehold.co/800x600/0d0e14/e5a93c?text=SOAP+AND+GHOST'])"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30"></div>
+          
+          <div class="absolute top-3 left-3 bg-black/85 px-3 py-1 rounded text-taskAmber font-mono text-[10px] font-bold border border-taskAmber/50">
+            <i class="fa-solid fa-shield mr-1"></i>WARZONE &bull; BROTHERHOOD IN COMBAT
+          </div>
+
+          <div class="absolute bottom-3 left-3 right-3 bg-black/85 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between">
+            <div>
+              <span class="font-orbitron font-bold text-white text-sm block">GOLDEN BLADE RECON</span>
+              <span class="font-mono text-[10px] text-taskAmber">MODERN WARFARE SPECIAL FORCES</span>
+            </div>
+            <span class="text-xs text-taskAmber font-mono"><i class="fa-solid fa-expand"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: 18224 - "it's in the eyes. always the eyes." -->
+      <div class="lg:col-span-2 bg-panelCharcoal rounded-2xl border-2 border-white/20 hover:border-ghostRed overflow-hidden shadow-2xl group cursor-pointer relative" onclick="openLightbox('18224.png', 'IT\'S IN THE EYES. ALWAYS THE EYES.')">
+        <div class="relative w-full aspect-[9/13] overflow-hidden bg-black">
+          <img 
+            src="18224.png" 
+            alt="Ghost Eyes Collage" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter grayscale contrast-125 hover:grayscale-0"
+            onerror="handleImgFallback(this, ['18224.jpg', 'https://placehold.co/600x800/0d0e14/ffffff?text=ALWAYS+THE+EYES'])"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40"></div>
+          
+          <div class="absolute top-3 left-3 bg-black/85 px-3 py-1 rounded text-white font-mono text-[10px] font-bold border border-white/30">
+            <i class="fa-solid fa-eye mr-1"></i>PSYCHOLOGICAL PROFILE
+          </div>
+
+          <div class="absolute bottom-3 left-3 right-3 bg-black/85 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between">
+            <div>
+              <span class="font-orbitron font-bold text-white text-sm block">“IT'S IN THE EYES.”</span>
+              <span class="font-mono text-[10px] text-slate-300">ALWAYS THE EYES &bull; GHOST MASK ARCHIVE</span>
+            </div>
+            <span class="text-xs text-cyberCyan font-mono"><i class="fa-solid fa-expand"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: 18223 - "- Do you have a heart? A cold one. -" -->
+      <div class="lg:col-span-2 bg-panelCharcoal rounded-2xl border-2 border-white/20 hover:border-cyberCyan overflow-hidden shadow-2xl group cursor-pointer relative" onclick="openLightbox('18223.png', 'DO YOU HAVE A HEART? A COLD ONE.')">
+        <div class="relative w-full aspect-[9/13] overflow-hidden bg-black">
+          <img 
+            src="18223.png" 
+            alt="Cold Heart Ghost Intel" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter contrast-125"
+            onerror="handleImgFallback(this, ['18223.jpg', 'https://placehold.co/600x800/0d0e14/00f0ff?text=A+COLD+ONE'])"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40"></div>
+          
+          <div class="absolute top-3 left-3 bg-black/85 px-3 py-1 rounded text-cyberCyan font-mono text-[10px] font-bold border border-cyberCyan/40">
+            <i class="fa-solid fa-snowflake mr-1"></i>SNOW RECON &bull; SUB-ZERO
+          </div>
+
+          <div class="absolute bottom-3 left-3 right-3 bg-black/85 backdrop-blur-md p-3 rounded-xl border border-white/10 flex items-center justify-between">
+            <div>
+              <span class="font-orbitron font-bold text-white text-sm block">“A COLD ONE.”</span>
+              <span class="font-mono text-[10px] text-cyberCyan">TACTICAL LORE ARCHIVE</span>
+            </div>
+            <span class="text-xs text-cyberCyan font-mono"><i class="fa-solid fa-expand"></i></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="matrix" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-white/10">
+    <div class="flex items-center space-x-3 mb-8">
+      <div class="h-8 w-1.5 bg-nvgGreen"></div>
+      <h2 class="text-2xl sm:text-3xl font-orbitron font-extrabold text-white tracking-wider uppercase">
+        04 // 4-YEAR COMBAT EXPERTISE MATRIX
+      </h2>
+    </div>
+
+    <!-- Interactive Game Discipline Selector -->
+    <div class="flex flex-wrap gap-3 mb-8">
+      <button onclick="switchCombatMatrix('codm')" id="btn-codm" class="bevel-btn px-6 py-2.5 bg-ghostRed text-white font-orbitron text-xs font-bold tracking-wider transition shadow-neonRed">
+        <i class="fa-solid fa-mobile-screen mr-1"></i> CALL OF DUTY: MOBILE
+      </button>
+      <button onclick="switchCombatMatrix('warzone')" id="btn-warzone" class="bevel-btn px-6 py-2.5 bg-panelCharcoal border border-white/20 text-slate-300 hover:text-white font-orbitron text-xs font-bold tracking-wider transition">
+        <i class="fa-solid fa-plane-departure mr-1"></i> COD: WARZONE
+      </button>
+      <button onclick="switchCombatMatrix('valorant')" id="btn-valorant" class="bevel-btn px-6 py-2.5 bg-panelCharcoal border border-white/20 text-slate-300 hover:text-white font-orbitron text-xs font-bold tracking-wider transition">
+        <i class="fa-solid fa-crosshairs mr-1"></i> VALORANT (TACTICAL FPS)
+      </button>
+    </div>
+
+    <!-- Active Matrix Display Card -->
+    <div id="matrixCard" class="bg-panelCharcoal/95 border-2 border-ghostRed/50 rounded-2xl p-6 sm:p-10 transition-all duration-300 shadow-2xl relative overflow-hidden">
+      
+      <div id="matrixContent" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <div class="lg:col-span-7 space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-ghostRed/20 border border-ghostRed text-ghostRed font-mono text-xs font-bold">
+            CALL OF DUTY: MOBILE &bull; 4 YEARS OF MASTERY
+          </div>
+          <h3 class="text-3xl font-orbitron font-black text-white">
+            CALL OF DUTY: MOBILE
+          </h3>
+          <p class="text-slate-300 font-chakra text-lg leading-relaxed">
+            Aarav's primary mobile combat domain. A relentless entry fragger who excels in Search & Destroy, hardpoint rotations, and tight SMG slide-canceling gunfights with the Static-HV.
+          </p>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono text-xs pt-2">
+            <div class="bg-black/60 p-3 rounded-lg border border-white/10">
+              <span class="text-slate-400 block">ROLE</span>
+              <span class="text-white font-bold text-sm">Entry Slayer / S&D</span>
+            </div>
+            <div class="bg-black/60 p-3 rounded-lg border border-white/10">
+              <span class="text-slate-400 block">K/D RATIO</span>
+              <span class="text-nvgGreen font-bold text-sm">2.00 Competitive</span>
+            </div>
+            <div class="bg-black/60 p-3 rounded-lg border border-white/10">
+              <span class="text-slate-400 block">SIGNATURE GUN</span>
+              <span class="text-taskAmber font-bold text-sm">Static-HV</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="w-full bg-matrixBlack border border-ghostRed/50 rounded-xl p-6 text-center space-y-4">
+            <div class="w-20 h-20 rounded-2xl bg-ghostRed/20 border-2 border-ghostRed mx-auto flex items-center justify-center text-ghostRed text-3xl shadow-neonRed">
+              <i class="fa-solid fa-mobile-screen"></i>
+            </div>
+            <div>
+              <h4 class="font-orbitron font-bold text-white text-base">CODM COMPETITIVE DECK</h4>
+              <p class="font-mono text-xs text-slate-400 mt-1">UID: 7422543457833123842</p>
+            </div>
+            <button onclick="copyData('7422543457833123842', 'Aarav\'s CODM UID Copied!')" class="w-full py-2.5 bg-ghostRed hover:bg-red-600 text-white font-orbitron text-xs font-bold rounded transition">
+              <i class="fa-regular fa-copy mr-1"></i> COPY CODM UID
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section id="aimlab" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-white/10">
+    <div class="flex items-center justify-between mb-8">
+      <div class="flex items-center space-x-3">
+        <div class="h-8 w-1.5 bg-red-500"></div>
+        <h2 class="text-2xl sm:text-3xl font-orbitron font-extrabold text-white tracking-wider uppercase">
+          05 // SPEC-OPS AIM LAB &bull; REACTION CALIBRATION
+        </h2>
+      </div>
+      <span class="font-mono text-xs text-nvgGreen hidden sm:inline"><i class="fa-solid fa-stopwatch mr-1"></i>20-SEC REFLEX DRILL</span>
+    </div>
+
+    <div class="bg-panelCharcoal/95 border-2 border-red-500/40 rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/10 mb-6">
+        <div>
+          <h3 class="text-xl font-orbitron font-bold text-white">TARGET ACQUISITION & FLICK SPEED</h3>
+          <p class="text-xs font-mono text-slate-400">Neutralize tactical holograms before the 20-second countdown runs out.</p>
+        </div>
+
+        <div class="flex items-center gap-4 sm:gap-6 font-mono text-sm">
+          <div class="bg-black/60 px-4 py-2 rounded-lg border border-white/10 text-center">
+            <span class="text-slate-400 text-xs block">TARGETS HIT</span>
+            <span id="drillScore" class="text-cyberCyan font-bold text-xl">0</span>
+          </div>
+          <div class="bg-black/60 px-4 py-2 rounded-lg border border-white/10 text-center">
+            <span class="text-slate-400 text-xs block">TIME REMAINING</span>
+            <span id="drillTimer" class="text-ghostRed font-bold text-xl">20s</span>
+          </div>
+          <button id="startDrillBtn" onclick="startReactionDrill()" class="bevel-btn px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-orbitron font-bold text-xs tracking-wider transition">
+            START DRILL
           </button>
         </div>
       </div>
 
-      <!-- Right Column: Tactical Operator Aesthetic Display -->
-      <div class="lg:col-span-6 space-y-4">
-        <div class="hud-border bg-tactical-panel/60 p-6 rounded-xl relative overflow-hidden">
-          <div class="absolute top-2 right-2 text-xs font-mono text-slate-500">FEED // CAM_042</div>
-          
-          <!-- Skull Emblem Canvas Card -->
-          <div class="w-full aspect-video bg-gradient-to-br from-tactical-black via-slate-900 to-black rounded-lg border border-tactical-border flex flex-col items-center justify-center p-6 text-center relative">
-            <div class="w-28 h-28 rounded-full border-2 border-dashed border-tactical-crimson/60 flex items-center justify-center mb-3 animate-pulse">
-              <i class="fa-solid fa-skull-crossbones text-6xl text-tactical-skull"></i>
-            </div>
-            <div class="font-orbitron font-bold text-xl text-white tracking-widest">TASK FORCE 141</div>
-            <div class="font-mono text-xs text-tactical-crimson">SPECIAL RECONNAISSANCE UNIT</div>
+      <!-- Aim Drill Sandbox -->
+      <div id="drillBox" class="relative w-full h-80 bg-black/90 rounded-xl border border-white/15 overflow-hidden flex items-center justify-center select-none cursor-crosshair">
+        
+        <div id="drillSplash" class="text-center p-6 space-y-3">
+          <i class="fa-solid fa-bullseye text-5xl text-red-500 animate-pulse"></i>
+          <h4 class="font-orbitron font-bold text-white text-lg">CALIBRATE FIRING SOLUTION</h4>
+          <p class="font-mono text-xs text-slate-400 max-w-md mx-auto">
+            Click 'START DRILL' to initiate a 20-second reflex challenge. Match Aarav's lightning fast flick speed!
+          </p>
+        </div>
 
-            <!-- Coordinate overlay -->
-            <div class="absolute bottom-3 left-4 font-mono text-[10px] text-slate-500">
-              LAT: 34.0522° N &bull; LON: 118.2437° W
-            </div>
-            <div class="absolute bottom-3 right-4 font-mono text-[10px] text-tactical-accent">
-              COMM_STATUS: SECURE
-            </div>
-          </div>
-
-          <!-- Operator Lore Quote -->
-          <div class="mt-4 p-3 bg-tactical-black/70 rounded border-l-4 border-tactical-crimson text-sm font-mono text-slate-300">
-            "They think they can hide behind smoke and shields. But in the dark, they belong to the Ghost."
+        <!-- Floating Hit Target -->
+        <div id="drillTarget" class="absolute hidden w-12 h-12 rounded-full cursor-pointer flex items-center justify-center transition-transform hover:scale-110 active:scale-95">
+          <div class="w-10 h-10 rounded-full border-2 border-ghostRed bg-ghostRed/30 flex items-center justify-center shadow-neonRed animate-ping"></div>
+          <div class="absolute w-6 h-6 rounded-full bg-taskAmber border border-white flex items-center justify-center">
+            <i class="fa-solid fa-crosshairs text-[10px] text-black"></i>
           </div>
         </div>
+
       </div>
     </div>
   </section>
 
-  <section id="armory" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-tactical-border/40">
+  <section id="comms" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-white/10">
     <div class="flex items-center space-x-3 mb-8">
-      <div class="h-6 w-1 bg-tactical-amber"></div>
-      <h2 class="text-2xl font-orbitron font-bold text-white tracking-wide uppercase">03 // SIGNATURE WEAPON: STATIC-HV</h2>
+      <div class="h-8 w-1.5 bg-[#5865F2]"></div>
+      <h2 class="text-2xl sm:text-3xl font-orbitron font-extrabold text-white tracking-wider uppercase">
+        06 // TACTICAL COMMS & SQUAD FREQUENCY
+      </h2>
     </div>
 
-    <div class="hud-border bg-tactical-dark rounded-xl p-6 sm:p-8">
+    <div class="bg-gradient-to-br from-panelCharcoal via-matrixBlack to-black border-2 border-[#5865F2]/50 rounded-2xl p-6 sm:p-10 relative overflow-hidden shadow-2xl">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         
-        <!-- Weapon Specifications & Performance Bars -->
-        <div class="lg:col-span-6 space-y-6">
-          <div>
-            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-tactical-amber/15 border border-tactical-amber/40 text-tactical-amber text-xs font-mono font-bold uppercase tracking-wider">
-              PRIMARY SUBMACHINE GUN (SMG)
-            </div>
-            <h3 class="text-4xl font-orbitron font-black text-white mt-2">STATIC-HV</h3>
-            <p class="text-slate-400 font-rajdhani text-base mt-1">
-              High-velocity, extreme cyclic fire rate submachine gun. Aarav's primary tool for wiping enemy squads in Resurgence, multiplayer hardpoints, and close-quarters shootouts.
-            </p>
-          </div>
-
-          <!-- Gun Stats Breakdown Bars -->
-          <div class="space-y-4 font-mono text-xs">
-            <!-- Stat: Fire Rate -->
-            <div>
-              <div class="flex justify-between mb-1">
-                <span class="text-slate-300">CYCLIC FIRE RATE</span>
-                <span class="text-tactical-accent font-bold">96 / 100</span>
-              </div>
-              <div class="w-full bg-tactical-panel h-2 rounded-full overflow-hidden border border-tactical-border">
-                <div class="bg-gradient-to-r from-tactical-accent to-blue-500 h-full w-[96%] transition-all duration-1000"></div>
-              </div>
-            </div>
-
-            <!-- Stat: Mobility -->
-            <div>
-              <div class="flex justify-between mb-1">
-                <span class="text-slate-300">TACTICAL MOBILITY & ADS SPEED</span>
-                <span class="text-tactical-accent font-bold">92 / 100</span>
-              </div>
-              <div class="w-full bg-tactical-panel h-2 rounded-full overflow-hidden border border-tactical-border">
-                <div class="bg-gradient-to-r from-tactical-accent to-emerald-400 h-full w-[92%] transition-all duration-1000"></div>
-              </div>
-            </div>
-
-            <!-- Stat: Recoil Control -->
-            <div>
-              <div class="flex justify-between mb-1">
-                <span class="text-slate-300">VERTICAL RECOIL STABILIZATION</span>
-                <span class="text-tactical-amber font-bold">84 / 100</span>
-              </div>
-              <div class="w-full bg-tactical-panel h-2 rounded-full overflow-hidden border border-tactical-border">
-                <div class="bg-gradient-to-r from-amber-500 to-tactical-amber h-full w-[84%] transition-all duration-1000"></div>
-              </div>
-            </div>
-
-            <!-- Stat: Damage Output -->
-            <div>
-              <div class="flex justify-between mb-1">
-                <span class="text-slate-300">CLOSE-RANGE DAMAGE COEFFICIENT</span>
-                <span class="text-tactical-crimson font-bold">80 / 100</span>
-              </div>
-              <div class="w-full bg-tactical-panel h-2 rounded-full overflow-hidden border border-tactical-border">
-                <div class="bg-gradient-to-r from-tactical-crimson to-red-600 h-full w-[80%] transition-all duration-1000"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Weapon Loadout Interactive Attachments -->
-        <div class="lg:col-span-6 space-y-4">
-          <div class="text-sm font-mono text-tactical-accent font-bold uppercase tracking-wider flex items-center gap-2">
-            <i class="fa-solid fa-wrench"></i> HKSAARAV GUNSMITH TUNING
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
-            <div class="bg-tactical-panel p-3 rounded border border-tactical-border/80">
-              <span class="text-tactical-accent block font-bold">MUZZLE</span>
-              <span class="text-white font-orbitron text-sm">ZEHMN35 Compensated</span>
-              <span class="text-[10px] text-slate-400 block mt-1">+Recoil Control, +Radar Concealment</span>
-            </div>
-
-            <div class="bg-tactical-panel p-3 rounded border border-tactical-border/80">
-              <span class="text-tactical-accent block font-bold">BARREL</span>
-              <span class="text-white font-orbitron text-sm">Auger 840 Light Barrel</span>
-              <span class="text-[10px] text-slate-400 block mt-1">+Sprint to Fire Speed, +Bullet Velocity</span>
-            </div>
-
-            <div class="bg-tactical-panel p-3 rounded border border-tactical-border/80">
-              <span class="text-tactical-accent block font-bold">MAGAZINE</span>
-              <span class="text-white font-orbitron text-sm">50 Round Drum</span>
-              <span class="text-[10px] text-slate-400 block mt-1">Sustained Squad Wipe Capacity</span>
-            </div>
-
-            <div class="bg-tactical-panel p-3 rounded border border-tactical-border/80">
-              <span class="text-tactical-accent block font-bold">STOCK / GRIP</span>
-              <span class="text-white font-orbitron text-sm">Spry 34 Light Stock</span>
-              <span class="text-[10px] text-slate-400 block mt-1">+Strafe Speed, +ADS Movement Speed</span>
-            </div>
-          </div>
-
-          <!-- Interactive Test Fire Simulation Trigger -->
-          <div class="pt-2">
-            <button id="testFireBtn" onclick="simulateWeaponFire()" class="w-full py-3.5 rounded bg-tactical-amber/15 border border-tactical-amber text-tactical-amber hover:bg-tactical-amber hover:text-black font-orbitron font-bold text-sm tracking-widest transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-crosshairs"></i> TEST FIRE STATIC-HV [AUDIO & RECOIL]
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <section id="comms" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-tactical-border/40">
-    <div class="flex items-center space-x-3 mb-8">
-      <div class="h-6 w-1 bg-[#5865F2]"></div>
-      <h2 class="text-2xl font-orbitron font-bold text-white tracking-wide uppercase">05 // TACTICAL COMMS & DIRECT DISCORD DM</h2>
-    </div>
-
-    <div class="hud-border bg-gradient-to-br from-tactical-dark via-tactical-panel to-tactical-black rounded-2xl p-6 sm:p-10 relative overflow-hidden">
-      <div class="absolute -top-12 -right-12 w-64 h-64 bg-[#5865F2]/10 rounded-full blur-3xl pointer-events-none"></div>
-      
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-        <!-- Left details -->
-        <div class="lg:col-span-7 space-y-5">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#5865F2]/20 border border-[#5865F2]/50 text-[#8ea1e1] font-mono text-xs font-bold">
-            <i class="fa-brands fa-discord text-base"></i> ENCRYPTED SQUAD FREQUENCY
+        <!-- Left: Direct Discord Card -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#5865F2]/20 border border-[#5865F2] text-[#8ea1e1] font-mono text-xs font-bold">
+            <i class="fa-brands fa-discord text-base"></i> ENCRYPTED DIRECT FREQUENCY
           </div>
 
           <h3 class="text-3xl sm:text-4xl font-orbitron font-black text-white">
-            DIRECT DISCORD SQUAD CHANNEL
+            COMMUNICATE WITH AARAV ON DISCORD
           </h3>
 
-          <p class="text-slate-300 font-rajdhani text-lg leading-relaxed">
-            Need an aggressive entry fragger for your tournament roster, 1v1 shipment duel, or ranked grind in Warzone/CODM? Connect directly on Discord with <span class="text-white font-bold font-mono">Aarav.55</span>. Instant DMs and scrim requests are monitored 24/7 under Ghost Protocol.
+          <p class="text-slate-300 font-chakra text-lg leading-relaxed">
+            Need an entry fragger for competitive Call of Duty: Mobile tournaments, a Warzone squad leader for high-kill rebirth drops, or a cracked duelist in Valorant? Send an encrypted dispatch on Discord.
           </p>
 
-          <!-- Discord User Badge Widget -->
-          <div class="hud-border bg-black/60 p-4 rounded-xl flex flex-wrap items-center justify-between gap-4 border-[#5865F2]/40">
+          <!-- User Highlight Card -->
+          <div class="bg-black/80 border border-[#5865F2]/50 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-4">
-              <div class="relative w-14 h-14 rounded-full bg-[#5865F2] flex items-center justify-center text-white text-2xl shadow-lg">
-                <i class="fa-solid fa-ghost"></i>
-                <span class="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-500 border-2 border-black" title="Online / Operational"></span>
+              <div class="relative w-14 h-14 rounded-xl bg-panelCharcoal border-2 border-[#5865F2] overflow-hidden">
+                <img 
+                  src="18217.png" 
+                  alt="Aarav Discord Avatar" 
+                  class="w-full h-full object-cover"
+                  onerror="handleImgFallback(this, ['18217.jpg', '6642.png', 'https://placehold.co/100x100/0d0e14/5865F2?text=AARAV'])"
+                />
+                <span class="absolute bottom-0.5 right-0.5 w-3 h-3 bg-nvgGreen rounded-full border-2 border-black" title="Online"></span>
               </div>
               <div>
                 <div class="flex items-center gap-2">
                   <span class="font-orbitron font-bold text-lg text-white">Aarav.55</span>
-                  <span class="bg-[#5865F2]/20 border border-[#5865F2] text-[#8ea1e1] text-[10px] font-mono px-2 py-0.5 rounded font-bold">DISCORD</span>
+                  <span class="bg-[#5865F2]/20 border border-[#5865F2] text-[#8ea1e1] text-[10px] font-mono px-2 py-0.5 rounded font-bold">VERIFIED</span>
                 </div>
-                <span class="font-mono text-xs text-slate-400 block mt-0.5">UID: 7422543457833123842 &bull; Status: Combat Ready</span>
+                <span class="font-mono text-xs text-slate-400 block mt-0.5">Ghost Operator &bull; Ready for Tournaments & Scrims</span>
               </div>
             </div>
 
-            <!-- Direct Actions -->
             <div class="flex flex-wrap items-center gap-2">
-              <button onclick="copyDiscordHandle()" class="px-5 py-2.5 rounded bg-[#5865F2] text-white hover:bg-[#4752C4] font-orbitron font-bold text-xs tracking-wider transition shadow-md flex items-center gap-2">
-                <i class="fa-solid fa-envelope-open-text"></i> SEND DM TO Aarav.55
+              <a href="https://discordapp.com/users/Aarav.55" target="_blank" rel="noopener noreferrer" class="bevel-btn px-5 py-2.5 bg-[#5865F2] text-white hover:bg-[#4752c4] font-orbitron font-bold text-xs tracking-wider transition shadow-lg flex items-center gap-2">
+                <i class="fa-solid fa-paper-plane"></i> OPEN DM
+              </a>
+              <button onclick="copyData('Aarav.55', 'Discord username Aarav.55 copied!')" class="bevel-btn px-4 py-2.5 bg-panelCharcoal border border-white/20 hover:border-[#5865F2] text-slate-200 hover:text-white font-mono text-xs transition flex items-center gap-2">
+                <i class="fa-regular fa-copy"></i> COPY TAG
               </button>
-              <button onclick="copyDiscordHandle()" class="px-4 py-2.5 rounded bg-tactical-panel border border-tactical-border hover:border-[#5865F2] text-slate-200 hover:text-white font-mono text-xs transition flex items-center gap-2">
-                <i class="fa-regular fa-clone"></i> COPY USERNAME
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Quick Military Intel Card -->
-        <div class="lg:col-span-5 space-y-3 font-mono text-xs">
-          <div class="bg-tactical-panel/80 p-4 rounded-xl border border-tactical-border/80 space-y-2">
-            <div class="text-tactical-accent font-bold uppercase tracking-wider flex items-center gap-2">
-              <i class="fa-solid fa-satellite-dish"></i> COMMUNICATIONS DIRECTORY
-            </div>
-            <div class="flex justify-between py-1.5 border-b border-tactical-border/50">
-              <span class="text-slate-400">DISCORD HANDLE:</span>
-              <span class="text-white font-bold cursor-pointer hover:underline" onclick="copyDiscordHandle()">Aarav.55</span>
-            </div>
-            <div class="flex justify-between py-1.5 border-b border-tactical-border/50">
-              <span class="text-slate-400">COD IN-GAME NAME:</span>
-              <span class="text-white font-bold cursor-pointer hover:underline" onclick="copyToClipboard('HKSAARAV', 'IGN Copied!')">HKSAARAV</span>
-            </div>
-            <div class="flex justify-between py-1.5 border-b border-tactical-border/50">
-              <span class="text-slate-400">ACTIVISION / UID:</span>
-              <span class="text-tactical-accent font-bold cursor-pointer hover:underline" onclick="copyToClipboard('7422543457833123842', 'UID Copied!')">7422543457833123842</span>
-            </div>
-            <div class="flex justify-between py-1.5">
-              <span class="text-slate-400">PREFERRED LOBBIES:</span>
-              <span class="text-tactical-amber font-bold">Resurgence / 5v5 Scrims</span>
             </div>
           </div>
 
-          <div class="hazard-stripe p-3 rounded-lg border border-amber-500/30 text-amber-300 font-mono text-[11px] flex items-center gap-2">
-            <i class="fa-solid fa-triangle-exclamation text-amber-400"></i>
-            <span>TRANSMIT SCRIM RULES & LOBBY IDS PRIOR TO MATCH START.</span>
+          <!-- Tactical Spec-Ops Dogtag Box -->
+          <div class="bg-black/60 p-4 rounded-xl border border-white/10 font-mono text-xs space-y-2">
+            <div class="flex justify-between">
+              <span class="text-slate-400">OPERATOR:</span>
+              <span class="text-white font-bold">Aarav // HKSAARAV</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">CODM UID:</span>
+              <span class="text-taskAmber font-bold">7422543457833123842</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">EXPERIENCE:</span>
+              <span class="text-nvgGreen font-bold">4 Years Combat Veteran</span>
+            </div>
           </div>
+
         </div>
+
+        <!-- Right: Squad Transmission Dispatch Form -->
+        <div class="lg:col-span-5 bg-black/85 border border-white/10 rounded-2xl p-6 font-mono text-xs space-y-4">
+          <div class="flex justify-between items-center border-b border-white/10 pb-3">
+            <span class="text-taskAmber font-bold uppercase tracking-wider">
+              <i class="fa-solid fa-terminal mr-1"></i> DIRECT SQUAD TRANSMISSION
+            </span>
+            <span class="text-[10px] text-slate-500">256-BIT MIL-SPEC</span>
+          </div>
+
+          <form onsubmit="handleDispatch(event)" class="space-y-3">
+            <div>
+              <label class="block text-slate-400 mb-1">CALLSIGN / CLAN</label>
+              <input type="text" id="dispName" required placeholder="e.g. ApexSquad / DeltaSix" class="w-full bg-panelCharcoal border border-white/10 rounded p-2.5 text-white focus:outline-none focus:border-ghostRed" />
+            </div>
+
+            <div>
+              <label class="block text-slate-400 mb-1">TARGET ARENA</label>
+              <select class="w-full bg-panelCharcoal border border-white/10 rounded p-2.5 text-white focus:outline-none focus:border-ghostRed">
+                <option>CODM Ranked MP / Scrimmage</option>
+                <option>COD: Warzone Rebirth / BR Duos</option>
+                <option>Valorant Competitive 5v5</option>
+                <option>General Esports Co-Op</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-slate-400 mb-1">YOUR DISCORD USERNAME</label>
+              <input type="text" id="dispDiscord" required placeholder="e.g. GhostCommander#0001" class="w-full bg-panelCharcoal border border-white/10 rounded p-2.5 text-white focus:outline-none focus:border-ghostRed" />
+            </div>
+
+            <div>
+              <label class="block text-slate-400 mb-1">MISSION BRIEFING</label>
+              <textarea rows="3" placeholder="Enter lobby schedule, role requirements, or scrimmage challenge..." class="w-full bg-panelCharcoal border border-white/10 rounded p-2.5 text-white focus:outline-none focus:border-ghostRed"></textarea>
+            </div>
+
+            <button type="submit" class="bevel-btn w-full py-3 bg-ghostRed hover:bg-red-600 text-white font-orbitron font-bold text-xs tracking-wider transition shadow-neonRed">
+              SEND TRANSMISSION
+            </button>
+          </form>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <section id="games" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-tactical-border/40">
-    <div class="flex items-center space-x-3 mb-8">
-      <div class="h-6 w-1 bg-tactical-accent"></div>
-      <h2 class="text-2xl font-orbitron font-bold text-white tracking-wide uppercase">04 // COMBAT ARENAS & 4-YEAR EXPERIENCE</h2>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Game 1: COD Warzone -->
-      <div class="hud-border bg-tactical-panel/60 p-6 rounded-xl flex flex-col justify-between space-y-4 hover:border-tactical-accent/80 transition duration-300">
+  <footer class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-panelCharcoal/90 border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      
+      <div class="flex items-center space-x-3.5">
+        <div class="w-12 h-12 rounded-xl bg-matrixBlack border border-ghostRed overflow-hidden">
+          <img 
+            src="18217.png" 
+            alt="Ghost Simon Riley" 
+            class="w-full h-full object-cover"
+            onerror="handleImgFallback(this, ['18217.jpg', '6642.png', 'https://placehold.co/100x100/0d0e14/e61937?text=A'])"
+          />
+        </div>
         <div>
-          <div class="flex justify-between items-center text-xs font-mono mb-2">
-            <span class="text-tactical-amber">BATTLE ROYALE</span>
-            <span class="text-slate-400">4 YEARS EXP</span>
-          </div>
-          <h3 class="text-2xl font-orbitron font-bold text-white flex items-center gap-2">
-            COD: WARZONE
-          </h3>
-          <p class="text-slate-300 font-rajdhani mt-2 text-sm">
-            High-octane Resurgence and Urzikstan squad wipes. Specialized in close-quarter rotational control with Static-HV and tactical SMG pacing.
-          </p>
-        </div>
-
-        <div class="border-t border-tactical-border pt-4 font-mono text-xs space-y-1">
-          <div class="flex justify-between">
-            <span class="text-slate-400">Playstyle:</span>
-            <span class="text-white font-bold">Aggressive Fragger / Flanker</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-slate-400">Fav Map:</span>
-            <span class="text-tactical-accent">Rebirth Island & Fortune's Keep</span>
-          </div>
+          <span class="font-orbitron font-black text-white text-base block tracking-wider">AARAV // HKSAARAV</span>
+          <span class="text-xs font-mono text-slate-400">“Do you have a heart? — A cold one.”</span>
         </div>
       </div>
 
-      <!-- Game 2: Call of Duty Mobile -->
-      <div class="hud-border bg-tactical-panel/60 p-6 rounded-xl flex flex-col justify-between space-y-4 hover:border-emerald-400/80 transition duration-300">
-        <div>
-          <div class="flex justify-between items-center text-xs font-mono mb-2">
-            <span class="text-emerald-400">RANKED MP & BR</span>
-            <span class="text-slate-400">MULTI-SEASON</span>
-          </div>
-          <h3 class="text-2xl font-orbitron font-bold text-white flex items-center gap-2">
-            COD MOBILE
-          </h3>
-          <p class="text-slate-300 font-rajdhani mt-2 text-sm">
-            Consistent Legendary Ranked player across multiple seasons. Mastered movement mechanics (slide-canceling, drop-shotting) and clutch 1v4 anchors.
-          </p>
-        </div>
-
-        <div class="border-t border-tactical-border pt-4 font-mono text-xs space-y-1">
-          <div class="flex justify-between">
-            <span class="text-slate-400">UID:</span>
-            <span class="text-emerald-400 font-bold truncate max-w-[140px]" title="7422543457833123842">7422543457833123842</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-slate-400">Peak Rank:</span>
-            <span class="text-white font-bold">Legendary (Top 1% Global)</span>
-          </div>
-        </div>
+      <div class="font-mono text-xs text-slate-500 text-center md:text-right">
+        <div>CODM UID: <span class="text-taskAmber font-bold">7422543457833123842</span> &bull; 4 YEARS SERVICE</div>
+        <div class="mt-1">&copy; <span id="yearEl">2026</span> HKSAARAV. TASK FORCE 141 COMBAT SPEC-OPS.</div>
       </div>
 
-      <!-- Game 3: Valorant -->
-      <div class="hud-border bg-tactical-panel/60 p-6 rounded-xl flex flex-col justify-between space-y-4 hover:border-tactical-crimson/80 transition duration-300">
-        <div>
-          <div class="flex justify-between items-center text-xs font-mono mb-2">
-            <span class="text-tactical-crimson">TACTICAL 5v5</span>
-            <span class="text-slate-400">COMPETITIVE</span>
-          </div>
-          <h3 class="text-2xl font-orbitron font-bold text-white flex items-center gap-2">
-            VALORANT
-          </h3>
-          <p class="text-slate-300 font-rajdhani mt-2 text-sm">
-            Tactical crosshair placement, utility coordination, and site executions. Flexing between Initiators and high-impact Duelists.
-          </p>
-        </div>
-
-        <div class="border-t border-tactical-border pt-4 font-mono text-xs space-y-1">
-          <div class="flex justify-between">
-            <span class="text-slate-400">Focus:</span>
-            <span class="text-white font-bold">First Bloods & Site Re-takes</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-slate-400">Key Strength:</span>
-            <span class="text-tactical-crimson">Calm Clutch Mentality</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer id="contact" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="hud-border bg-tactical-panel/90 rounded-2xl p-8 sm:p-12 text-center space-y-6 relative overflow-hidden">
-      <div class="absolute -right-10 -bottom-10 opacity-10 text-tactical-accent pointer-events-none">
-        <i class="fa-solid fa-crosshairs text-9xl"></i>
-      </div>
-
-      <span class="inline-block px-3 py-1 rounded bg-tactical-accent/15 border border-tactical-accent/40 text-tactical-accent font-mono text-xs tracking-widest font-bold">
-        COMMUNICATION FREQUENCY OPEN
-      </span>
-
-      <h2 class="text-3xl sm:text-5xl font-orbitron font-black text-white tracking-wide">
-        READY TO SQUAD UP OR CHALLENGE?
-      </h2>
-
-      <p class="text-slate-300 font-rajdhani text-lg max-w-2xl mx-auto">
-        Looking for a dedicated entry fragger for your tier-1 tournament roster, or want to test your gunskill in a 1v1 shipment / custom lobby? Send a combat transmission.
-      </p>
-
-      <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
-        <button onclick="copyToClipboard('HKSAARAV', 'IGN HKSAARAV Copied! Paste it into your game search.')" class="px-6 py-3 rounded bg-tactical-accent text-black font-orbitron font-bold text-sm tracking-wider hover:bg-cyan-300 transition shadow-neonCyan flex items-center gap-2">
-          <i class="fa-solid fa-user-plus"></i> ADD HKSAARAV IN-GAME
+      <div class="flex items-center space-x-4 text-slate-400">
+        <a href="https://discordapp.com/users/Aarav.55" target="_blank" rel="noopener noreferrer" class="hover:text-taskAmber transition" title="Discord Profile">
+          <i class="fa-brands fa-discord text-xl"></i>
+        </a>
+        <button onclick="copyData('7422543457833123842', 'CODM UID Copied!')" class="hover:text-ghostRed transition" title="Copy UID">
+          <i class="fa-solid fa-fingerprint text-xl"></i>
         </button>
-
-        <button onclick="copyToClipboard('7422543457833123842', 'UID Copied!')" class="px-6 py-3 rounded bg-tactical-dark border border-tactical-border hover:border-tactical-accent text-white font-mono text-sm tracking-wider transition flex items-center gap-2">
-          <i class="fa-regular fa-copy"></i> COPY UID: 7422543457833123842
+        <button onclick="copyData('HKSAARAV', 'IGN Copied!')" class="hover:text-cyberCyan transition" title="Copy IGN">
+          <i class="fa-regular fa-clone text-xl"></i>
         </button>
       </div>
 
-      <!-- Social & Discord Channels -->
-      <div class="pt-8 border-t border-tactical-border/70 flex flex-wrap justify-between items-center text-xs font-mono text-slate-400 gap-4">
-        <div>
-          &copy; <span id="yearSpan">2026</span> HKSAARAV // AARAV. OPERATING UNDER GHOST PROTOCOL.
-        </div>
-        <div class="flex items-center space-x-6 text-base">
-          <button onclick="copyDiscordHandle()" class="hover:text-[#5865F2] transition flex items-center gap-1.5 text-xs font-mono" title="Copy Discord Tag">
-            <i class="fa-brands fa-discord text-lg text-[#5865F2]"></i> <span>Aarav.55</span>
-          </button>
-          <a href="#" class="hover:text-tactical-crimson transition" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-          <a href="#" class="hover:text-tactical-amber transition" title="Twitch"><i class="fa-brands fa-twitch"></i></a>
-          <a href="#" class="hover:text-tactical-accent transition" title="Steam"><i class="fa-brands fa-steam"></i></a>
-        </div>
-      </div>
     </div>
   </footer>
 
-  <div id="recruitmentModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="hud-border bg-tactical-dark max-w-lg w-full p-6 rounded-xl relative">
-      <div class="flex justify-between items-center border-b border-tactical-border pb-3 mb-4">
-        <h3 class="font-orbitron font-bold text-lg text-white flex items-center gap-2">
-          <i class="fa-solid fa-file-shield text-tactical-accent"></i> SQUAD / SCRIM TRANSMISSION
-        </h3>
-        <button onclick="closeModal('recruitmentModal')" class="text-slate-400 hover:text-white text-lg">
+  <!-- Lightbox Intelligence Modal for High-Resolution Image Inspection -->
+  <div id="lightboxModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-matrixBlack border-2 border-ghostRed max-w-4xl w-full rounded-2xl overflow-hidden shadow-2xl relative">
+      <div class="bg-panelCharcoal px-5 py-3 border-b border-white/10 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-ghostRed animate-ping"></span>
+          <span id="lightboxTitle" class="font-orbitron font-bold text-sm text-ghostRed">OPERATOR INTELLIGENCE ARCHIVE</span>
+        </div>
+        <button onclick="closeLightbox()" class="text-slate-400 hover:text-white text-xl">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <form id="scrimForm" onsubmit="handleFormSubmit(event)" class="space-y-4 font-mono text-xs">
-        <div>
-          <label class="block text-slate-300 mb-1">CALLSIGN / TEAM NAME</label>
-          <input type="text" required placeholder="e.g. Shadow Company / Team Nexus" class="w-full bg-tactical-panel border border-tactical-border rounded p-2.5 text-white focus:outline-none focus:border-tactical-accent" />
+      <div class="p-4 bg-black flex flex-col items-center">
+        <img 
+          id="lightboxImg"
+          src="18217.png" 
+          alt="Ghost Intel Inspect" 
+          class="w-full max-h-[72vh] object-contain rounded-lg border border-white/15"
+        />
+        <div class="mt-3 w-full flex flex-wrap justify-between items-center font-mono text-xs text-slate-400 px-2">
+          <span>OPERATOR: SIMON "GHOST" RILEY &bull; HKSAARAV</span>
+          <span class="text-taskAmber font-bold">STATUS: DECLASSIFIED ARCHIVE</span>
         </div>
-
-        <div>
-          <label class="block text-slate-300 mb-1">TARGET ARENA</label>
-          <select class="w-full bg-tactical-panel border border-tactical-border rounded p-2.5 text-white focus:outline-none focus:border-tactical-accent">
-            <option>COD Warzone (Resurgence / BR)</option>
-            <option>COD Mobile (Ranked MP / Tourneys)</option>
-            <option>Valorant (Competitive 5v5)</option>
-            <option>1v1 Gunfight / Aim Duel</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-slate-300 mb-1">DISCORD TAG OR CONTACT INFO</label>
-          <input type="text" required placeholder="e.g. Captain#1234" class="w-full bg-tactical-panel border border-tactical-border rounded p-2.5 text-white focus:outline-none focus:border-tactical-accent" />
-        </div>
-
-        <div>
-          <label class="block text-slate-300 mb-1">TACTICAL BRIEFING / MESSAGE</label>
-          <textarea rows="3" placeholder="Time, tournament rules, or scrim slots..." class="w-full bg-tactical-panel border border-tactical-border rounded p-2.5 text-white focus:outline-none focus:border-tactical-accent"></textarea>
-        </div>
-
-        <button type="submit" class="w-full py-3 rounded bg-tactical-accent text-black font-orbitron font-bold text-sm tracking-wider hover:bg-cyan-300 transition">
-          TRANSMIT INTEL
-        </button>
-      </form>
+      </div>
     </div>
   </div>
 
-  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
-    <div class="hud-border bg-tactical-panel border-tactical-accent/80 text-white px-5 py-3 rounded-lg shadow-neonCyan flex items-center gap-3">
-      <i class="fa-solid fa-check-circle text-tactical-accent text-base"></i>
-      <span id="toastMessage" class="font-mono text-sm tracking-wider">INTEL ACQUIRED</span>
+  <!-- Tactical HUD Toast Alert -->
+  <div id="toastHUD" class="fixed bottom-6 right-6 z-50 transform translate-y-28 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bevel-btn bg-panelCharcoal border-2 border-ghostRed text-white px-5 py-3.5 shadow-neonRed flex items-center gap-3">
+      <i class="fa-solid fa-skull text-ghostRed text-xl"></i>
+      <div>
+        <span class="font-orbitron font-bold text-xs text-ghostRed block">MIL-SPEC TELEMETRY</span>
+        <span id="toastMsgText" class="font-mono text-xs text-slate-200">INTEL UPDATED</span>
+      </div>
     </div>
   </div>
 
   <script>
-    // Audio synthesizer for military/tactical sounds without external sound asset dependencies
+    // Robust Multi-Extension Image Fallback Handler
+    function handleImgFallback(imgElement, candidateUrls) {
+      if (!imgElement.dataset.fallbackIndex) {
+        imgElement.dataset.fallbackIndex = '0';
+      }
+      let idx = parseInt(imgElement.dataset.fallbackIndex, 10);
+      if (idx < candidateUrls.length) {
+        imgElement.dataset.fallbackIndex = (idx + 1).toString();
+        imgElement.src = candidateUrls[idx];
+      }
+    }
+
+    // Web Audio Synthesizer for Spec-Ops Tactical Sounds
     let audioContext = null;
     let sfxEnabled = true;
 
-    function getAudioContext() {
+    function getAudioCtx() {
       if (!audioContext) {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (AudioContextClass) {
-          audioContext = new AudioContextClass();
-        }
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioClass) audioContext = new AudioClass();
       }
       if (audioContext && audioContext.state === 'suspended') {
         audioContext.resume();
@@ -907,230 +1154,595 @@
       return audioContext;
     }
 
-    // Toggle SFX
-    document.getElementById('sfxToggle').addEventListener('click', () => {
+    function toggleAudioSFX() {
       sfxEnabled = !sfxEnabled;
-      document.getElementById('sfxLabel').innerText = sfxEnabled ? 'SFX: ON' : 'SFX: OFF';
-      document.getElementById('sfxIcon').className = sfxEnabled ? 'fa-solid fa-volume-high text-tactical-accent' : 'fa-solid fa-volume-xmark text-slate-500';
-      if (sfxEnabled) playTacticalBeep(880, 0.08);
-    });
+      const icon = document.getElementById('audioIcon');
+      const label = document.getElementById('audioLabel');
+      if (sfxEnabled) {
+        icon.className = 'fa-solid fa-volume-high text-ghostRed';
+        label.innerText = 'TACTICAL SFX: ON';
+        playTacticalTone(720, 0.08);
+        triggerToast("TACTICAL SFX: ACTIVATED");
+      } else {
+        icon.className = 'fa-solid fa-volume-xmark text-slate-500';
+        label.innerText = 'TACTICAL SFX: MUTED';
+        triggerToast("TACTICAL SFX: MUTED");
+      }
+    }
 
-    // Synthesized tactical beep
-    function playTacticalBeep(freq = 600, duration = 0.08) {
+    function playTacticalTone(freq = 600, duration = 0.08, type = 'sine') {
       if (!sfxEnabled) return;
       try {
-        const ctx = getAudioContext();
+        const ctx = getAudioCtx();
         if (!ctx) return;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'sine';
+        osc.type = type;
         osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
         osc.stop(ctx.currentTime + duration);
       } catch (err) {
-        console.warn('Audio synthesis issue:', err);
+        console.warn(err);
       }
     }
 
-    // Direct Discord Handle Copy & App Launcher Helper
-    function copyDiscordHandle() {
-      const discordTag = "Aarav.55";
-      copyToClipboard(discordTag, "DISCORD TAG 'Aarav.55' COPIED! OPENING DISCORD...");
-      // Opens Discord web or app
-      setTimeout(() => {
-        window.open('https://discord.com/app', '_blank');
-      }, 650);
-    }
-
-    // Static-HV Rapid Fire Burst Simulation
-    function simulateWeaponFire() {
-      playTacticalBeep(350, 0.05);
-      showToast("STATIC-HV: 5-ROUND HIGH VELOCITY BURST DISCHARGED!");
-      
-      const btn = document.getElementById('testFireBtn');
-      btn.classList.add('bg-tactical-crimson', 'text-white', 'scale-95');
-      setTimeout(() => btn.classList.remove('bg-tactical-crimson', 'text-white', 'scale-95'), 180);
-
-      if (!sfxEnabled) return;
-      const ctx = getAudioContext();
-      if (!ctx) return;
-
-      // Generate 5 rapid high-cadence burst shots
-      for (let i = 0; i < 5; i++) {
+    // Static-HV Submachine Gun Rapid Burst Firing Synthesizer
+    function fireStaticHVBurst() {
+      playTacticalTone(180, 0.04, 'sawtooth');
+      const flash = document.getElementById('muzzleFlash');
+      if (flash) {
+        flash.classList.remove('opacity-0');
+        flash.classList.add('opacity-100');
         setTimeout(() => {
-          try {
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(240 - i * 15, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.06);
-            gain.gain.setValueAtTime(0.18, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.06);
-          } catch (e) {}
+          flash.classList.remove('opacity-100');
+          flash.classList.add('opacity-0');
+        }, 120);
+      }
+
+      for (let i = 0; i < 4; i++) {
+        setTimeout(() => {
+          playTacticalTone(140 + Math.random() * 40, 0.05, 'sawtooth');
         }, i * 65);
       }
+
+      triggerToast("STATIC-HV BURST: 4 ROUNDS FIRED // TTK VERIFIED");
     }
 
-    // Operator Ghost Radio Transmission with static burst
-    function playOperatorVoiceline() {
-      playTacticalBeep(980, 0.06);
-      setTimeout(() => playTacticalBeep(650, 0.09), 80);
-      setTimeout(() => playTacticalBeep(420, 0.12), 160);
-      showToast("GHOST COMMS: 'BRAVO SIX, GOING DARK. DISCORD CHANNEL ACTIVE.'");
+    function playGhostQuoteAudio() {
+      playTacticalTone(350, 0.12, 'sawtooth');
+      setTimeout(() => playTacticalTone(220, 0.2, 'square'), 90);
+      triggerToast("AUDIO LOG: “Do you have a heart? — A cold one.”");
     }
 
-    function copyToClipboard(text, customMsg) {
-      playTacticalBeep(750, 0.08);
-
-      let copied = false;
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(() => {
-          showToast(customMsg || `Copied ${text}`);
-        }).catch(() => fallbackCopy(text, customMsg));
-      } else {
-        fallbackCopy(text, customMsg);
-      }
+    // Lightbox Modal Controls
+    function openLightbox(src, title) {
+      playTacticalTone(680, 0.07);
+      const modal = document.getElementById('lightboxModal');
+      const img = document.getElementById('lightboxImg');
+      const titleEl = document.getElementById('lightboxTitle');
+      img.src = src;
+      titleEl.innerText = title || "GHOST OPERATOR RECON";
+      modal.classList.remove('hidden');
     }
 
-    function fallbackCopy(text, customMsg) {
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-      textArea.style.position = "fixed";
-      textArea.style.left = "-9999px";
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
+    function closeLightbox() {
+      playTacticalTone(320, 0.05);
+      document.getElementById('lightboxModal').classList.add('hidden');
+    }
+
+    // Clipboard Copy Helper
+    function copyData(text, msg) {
+      playTacticalTone(800, 0.08);
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
       try {
         document.execCommand('copy');
-        showToast(customMsg || `Copied ${text}`);
-      } catch (err) {
-        showToast(`Selected: ${text}`);
+        triggerToast(msg || `Copied: ${text}`);
+      } catch (e) {
+        triggerToast(`Selected: ${text}`);
       }
-      document.body.removeChild(textArea);
+      document.body.removeChild(ta);
     }
 
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      const toastMsg = document.getElementById('toastMessage');
-      toastMsg.innerText = message;
-      toast.classList.remove('translate-y-24', 'opacity-0');
+    // HUD Toast Alert
+    function triggerToast(text) {
+      const toast = document.getElementById('toastHUD');
+      const toastMsg = document.getElementById('toastMsgText');
+      toastMsg.innerText = text;
+      toast.classList.remove('translate-y-28', 'opacity-0');
       toast.classList.add('translate-y-0', 'opacity-100');
 
       setTimeout(() => {
         toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-24', 'opacity-0');
-      }, 3200);
+        toast.classList.add('translate-y-28', 'opacity-0');
+      }, 3000);
     }
 
-    // Modal Handlers
-    function openModal(modalId) {
-      playTacticalBeep(520, 0.08);
-      document.getElementById(modalId).classList.remove('hidden');
-    }
-
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.add('hidden');
-    }
-
-    function handleFormSubmit(e) {
+    function handleDispatch(e) {
       e.preventDefault();
-      playTacticalBeep(880, 0.12);
-      closeModal('recruitmentModal');
-      showToast("TRANSMISSION LOGGED! HKSAARAV WILL CONTACT VIA DISCORD.");
+      playTacticalTone(880, 0.15, 'triangle');
+      const name = document.getElementById('dispName').value;
+      triggerToast(`ENCRYPTED DISPATCH RECEIVED FROM ${name.toUpperCase()}! AARAV WILL ENGAGE.`);
       e.target.reset();
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      // Dynamic year
-      const y = document.getElementById('yearSpan');
-      if (y) y.innerText = new Date().getFullYear();
+    // 4-Year Combat Matrix Data & Switcher
+    const matrixData = {
+      codm: {
+        tag: 'CALL OF DUTY: MOBILE &bull; 4 YEARS OF MASTERY',
+        title: 'CALL OF DUTY: MOBILE',
+        desc: "Aarav's primary mobile combat domain. A relentless entry fragger who excels in Search & Destroy, hardpoint rotations, and tight SMG slide-canceling gunfights with the Static-HV.",
+        role: 'Entry Slayer / S&D',
+        kd: '2.00 Competitive',
+        primary: 'Static-HV',
+        borderColor: 'border-ghostRed',
+        icon: 'fa-mobile-screen',
+        iconColor: 'text-ghostRed',
+        btnText: 'COPY CODM UID',
+        btnCopy: '7422543457833123842'
+      },
+      warzone: {
+        tag: 'CALL OF DUTY: WARZONE &bull; RESURGENCE & BATTLE ROYALE',
+        title: 'CALL OF DUTY: WARZONE',
+        desc: 'Aggressive rebirth drop specialist with 4 years of Call of Duty gunplay mastery. Renowned for high-kill rotations, pinpoint rooftop sniper counters, and clutch final-circle team wipes.',
+        role: 'Drop Leader / Slayer',
+        kd: 'High K/D Ratio',
+        primary: 'Static-HV & Sniper',
+        borderColor: 'border-taskAmber',
+        icon: 'fa-plane-departure',
+        iconColor: 'text-taskAmber',
+        btnText: 'COPY DISCORD FOR SQUAD',
+        btnCopy: 'Aarav.55'
+      },
+      valorant: {
+        tag: 'VALORANT &bull; TACTICAL 5v5 FPS SPECIALIST',
+        title: 'VALORANT (TACTICAL FPS)',
+        desc: 'Tactical discipline meets aggressive entry dueling. Master of angle clearance, crosshair placement, fast pre-aim headshots, and site executes in high-stakes competitive lobbies.',
+        role: 'Duelist / Initiator',
+        kd: 'Competitive Rank',
+        primary: 'Vandal / Phantom',
+        borderColor: 'border-nvgGreen',
+        icon: 'fa-crosshairs',
+        iconColor: 'text-nvgGreen',
+        btnText: 'COPY DISCORD FOR COMP',
+        btnCopy: 'Aarav.55'
+      }
+    };
 
-      // Number counter animation on load
-      const counters = document.querySelectorAll('.counter');
-      counters.forEach(counter => {
-        const target = parseFloat(counter.getAttribute('data-target'));
-        const isDecimal = target % 1 !== 0;
-        let count = 0;
-        const speed = target / 35;
+    function switchCombatMatrix(key) {
+      playTacticalTone(550, 0.08);
+      const data = matrixData[key];
+      if (!data) return;
 
-        const updateCount = () => {
-          count += speed;
-          if (count < target) {
-            counter.innerText = isDecimal ? count.toFixed(2) : Math.ceil(count);
-            setTimeout(updateCount, 30);
-          } else {
-            counter.innerText = isDecimal ? target.toFixed(2) : target;
-          }
-        };
-        updateCount();
+      ['codm', 'warzone', 'valorant'].forEach(k => {
+        const btn = document.getElementById(`btn-${k}`);
+        if (k === key) {
+          btn.className = 'bevel-btn px-6 py-2.5 bg-ghostRed text-white font-orbitron text-xs font-bold tracking-wider transition shadow-neonRed';
+        } else {
+          btn.className = 'bevel-btn px-6 py-2.5 bg-panelCharcoal border border-white/20 text-slate-300 hover:text-white font-orbitron text-xs font-bold tracking-wider transition';
+        }
       });
 
-      // Canvas Radar Matrix
-      const canvas = document.getElementById('radarCanvas');
-      if (!canvas) return;
+      const container = document.getElementById('matrixCard');
+      container.className = `bg-panelCharcoal/95 border-2 ${data.borderColor} rounded-2xl p-6 sm:p-10 transition-all duration-300 shadow-2xl relative overflow-hidden`;
+
+      document.getElementById('matrixContent').innerHTML = `
+        <div class="lg:col-span-7 space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-white/10 border border-white/20 text-white font-mono text-xs font-bold">
+            ${data.tag}
+          </div>
+          <h3 class="text-3xl font-orbitron font-black text-white">
+            ${data.title}
+          </h3>
+          <p class="text-slate-300 font-chakra text-lg leading-relaxed">
+            ${data.desc}
+          </p>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono text-xs pt-2">
+            <div class="bg-black/60 p-3 rounded-lg border border-white/10">
+              <span class="text-slate-400 block">ROLE</span>
+              <span class="text-white font-bold text-sm">${data.role}</span>
+            </div>
+            <div class="bg-black/60 p-3 rounded-lg border border-white/10">
+              <span class="text-nvgGreen font-bold text-sm">${data.kd}</span>
+            </div>
+            <div class="bg-black/60 p-3 rounded-lg border border-white/10">
+              <span class="text-slate-400 block">LOADOUT</span>
+              <span class="text-taskAmber font-bold text-sm">${data.primary}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="w-full bg-matrixBlack border ${data.borderColor} rounded-xl p-6 text-center space-y-4">
+            <div class="w-20 h-20 rounded-2xl bg-white/5 border-2 ${data.borderColor} mx-auto flex items-center justify-center ${data.iconColor} text-3xl shadow-lg">
+              <i class="fa-solid ${data.icon}"></i>
+            </div>
+            <div>
+              <h4 class="font-orbitron font-bold text-white text-base">${data.title} DECK</h4>
+              <p class="font-mono text-xs text-slate-400 mt-1">Operator: Aarav // HKSAARAV</p>
+            </div>
+            <button onclick="copyData('${data.btnCopy}', '${data.btnText} Copied!')" class="w-full py-2.5 bg-ghostRed hover:bg-red-600 text-white font-orbitron text-xs font-bold rounded transition">
+              <i class="fa-regular fa-copy mr-1"></i> ${data.btnText}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Reaction Drill (Aim Lab Mini-Game)
+    let drillActive = false;
+    let drillScore = 0;
+    let drillSeconds = 20;
+    let drillInterval = null;
+    let targetTimer = null;
+
+    const drillBox = document.getElementById('drillBox');
+    const drillTarget = document.getElementById('drillTarget');
+    const drillScoreTxt = document.getElementById('drillScore');
+    const drillTimerTxt = document.getElementById('drillTimer');
+    const drillSplash = document.getElementById('drillSplash');
+
+    function startReactionDrill() {
+      if (drillActive) return;
+      drillActive = true;
+      drillScore = 0;
+      drillSeconds = 20;
+      drillScoreTxt.innerText = '0';
+      drillTimerTxt.innerText = '20s';
+      drillSplash.classList.add('hidden');
+      drillTarget.classList.remove('hidden');
+
+      playTacticalTone(600, 0.1);
+      spawnNextBullseye();
+
+      drillInterval = setInterval(() => {
+        drillSeconds--;
+        drillTimerTxt.innerText = drillSeconds + 's';
+        if (drillSeconds <= 0) {
+          endReactionDrill();
+        }
+      }, 1000);
+    }
+
+    function spawnNextBullseye() {
+      if (!drillActive) return;
+      const maxW = drillBox.clientWidth - 65;
+      const maxH = drillBox.clientHeight - 65;
+
+      const posX = Math.max(10, Math.floor(Math.random() * maxW));
+      const posY = Math.max(10, Math.floor(Math.random() * maxH));
+
+      drillTarget.style.left = posX + 'px';
+      drillTarget.style.top = posY + 'px';
+
+      clearTimeout(targetTimer);
+      targetTimer = setTimeout(() => {
+        if (drillActive) spawnNextBullseye();
+      }, 850);
+    }
+
+    drillTarget.addEventListener('click', () => {
+      if (!drillActive) return;
+      drillScore++;
+      drillScoreTxt.innerText = drillScore;
+      playTacticalTone(980, 0.05, 'triangle');
+      spawnNextBullseye();
+    });
+
+    function endReactionDrill() {
+      drillActive = false;
+      clearInterval(drillInterval);
+      clearTimeout(targetTimer);
+      drillTarget.classList.add('hidden');
+      drillSplash.classList.remove('hidden');
+
+      playTacticalTone(880, 0.2, 'square');
+      let rating = "ROOKIE OPERATOR";
+      if (drillScore >= 24) rating = "GHOST LEVEL FLICK";
+      else if (drillScore >= 16) rating = "VETERAN MARKSMAN";
+      else if (drillScore >= 8) rating = "SPECIAL FORCES TIER";
+
+      drillSplash.innerHTML = `
+        <i class="fa-solid fa-trophy text-4xl text-taskAmber"></i>
+        <h4 class="font-orbitron font-bold text-white text-lg">DRILL COMPLETE: ${drillScore} HITS</h4>
+        <p class="font-mono text-xs text-cyberCyan">TACTICAL RATING: <strong class="text-white">${rating}</strong></p>
+        <button onclick="startReactionDrill()" class="mt-2 bevel-btn px-4 py-2 bg-ghostRed text-white font-orbitron font-bold text-xs">TRY AGAIN</button>
+      `;
+      triggerToast(`DRILL SCORE: ${drillScore} TARGETS HIT!`);
+    }
+
+    // 3D Tilt Effect on Hero Poster Card
+    const posterCard = document.getElementById('heroPosterCard');
+    if (posterCard) {
+      posterCard.addEventListener('mousemove', (e) => {
+        const rect = posterCard.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -10;
+        const rotateY = ((x - centerX) / centerX) * 10;
+        posterCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+      posterCard.addEventListener('mouseleave', () => {
+        posterCard.style.transform = `rotateX(0deg) rotateY(0deg)`;
+      });
+    }
+
+    // Dynamic Military Canvas Radar & Tactical Particles
+    const canvas = document.getElementById('tacticalCanvas');
+    if (canvas) {
       const ctx = canvas.getContext('2d');
-      let width = (canvas.width = window.innerWidth);
-      let height = (canvas.height = window.innerHeight);
+      let particles = [];
+      let hudGlyphs = [];
+      let mouse = { x: -1000, y: -1000, active: false };
+      let radarAngle = 0;
 
-      window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
+      const glyphWords = [
+        "TF-141 // HKSAARAV",
+        "STATIC-HV // READY",
+        "VALORANT &bull; WARZONE &bull; CODM",
+        "4 YRS EXP // VERIFIED",
+        "GHOST OPERATOR SIMON RILEY",
+        "MIL-SPEC 256-BIT ENCRYPTION",
+        "CHOICES HAVE CONSEQUENCES",
+        "DO YOU HAVE A HEART? A COLD ONE."
+      ];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initParticles();
+      }
+
+      function initParticles() {
+        particles = [];
+        const count = Math.min(85, Math.floor((canvas.width * canvas.height) / 16000));
+        
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.7,
+            vy: (Math.random() - 0.5) * 0.7 - 0.25,
+            size: Math.random() * 2.2 + 0.8,
+            color: Math.random() > 0.6 ? '#e61937' : (Math.random() > 0.35 ? '#e5a93c' : '#00f0ff'),
+            alpha: Math.random() * 0.6 + 0.2,
+            pulseSpeed: Math.random() * 0.03 + 0.01,
+            pulseDir: 1
+          });
+        }
+
+        hudGlyphs = [];
+        for (let j = 0; j < 5; j++) {
+          hudGlyphs.push({
+            text: glyphWords[Math.floor(Math.random() * glyphWords.length)],
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vy: -0.35 - Math.random() * 0.25,
+            alpha: Math.random() * 0.35 + 0.15
+          });
+        }
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        mouse.active = true;
+      });
+      window.addEventListener('mouseleave', () => {
+        mouse.active = false;
+        mouse.x = -1000;
+        mouse.y = -1000;
       });
 
-      const nodes = Array.from({ length: 32 }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.7,
-        vy: (Math.random() - 0.5) * 0.7,
-        size: Math.random() * 2 + 1
-      }));
+      resizeCanvas();
 
-      function renderCanvas() {
-        ctx.clearRect(0, 0, width, height);
+      function drawTacticalBackground() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw connections
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = i + 1; j < nodes.length; j++) {
-            const dx = nodes[i].x - nodes[j].x;
-            const dy = nodes[i].y - nodes[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
+        // 1. Sonar Radar Sweep
+        const radarCenterX = canvas.width > 900 ? canvas.width * 0.82 : canvas.width * 0.5;
+        const radarCenterY = canvas.height > 900 ? canvas.height * 0.25 : canvas.height * 0.35;
+        const radarRadius = Math.min(canvas.width, canvas.height) * 0.48;
 
+        radarAngle += 0.012;
+        if (radarAngle >= Math.PI * 2) radarAngle = 0;
+
+        ctx.strokeStyle = "rgba(230, 25, 55, 0.08)";
+        ctx.lineWidth = 1;
+        for (let r = 70; r < radarRadius; r += 70) {
+          ctx.beginPath();
+          ctx.arc(radarCenterX, radarCenterY, r, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        ctx.strokeStyle = "rgba(229, 169, 60, 0.12)";
+        ctx.beginPath();
+        ctx.moveTo(radarCenterX - radarRadius, radarCenterY);
+        ctx.lineTo(radarCenterX + radarRadius, radarCenterY);
+        ctx.moveTo(radarCenterX, radarCenterY - radarRadius);
+        ctx.lineTo(radarCenterX, radarCenterY + radarRadius);
+        ctx.stroke();
+
+        const sweepGrad = ctx.createRadialGradient(
+          radarCenterX, radarCenterY, 0,
+          radarCenterX, radarCenterY, radarRadius
+        );
+        sweepGrad.addColorStop(0, "rgba(230, 25, 55, 0.18)");
+        sweepGrad.addColorStop(1, "rgba(230, 25, 55, 0)");
+
+        ctx.save();
+        ctx.fillStyle = sweepGrad;
+        ctx.beginPath();
+        ctx.moveTo(radarCenterX, radarCenterY);
+        ctx.arc(radarCenterX, radarCenterY, radarRadius, radarAngle - 0.35, radarAngle);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(230, 25, 55, 0.45)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(radarCenterX, radarCenterY);
+        ctx.lineTo(
+          radarCenterX + Math.cos(radarAngle) * radarRadius,
+          radarCenterY + Math.sin(radarAngle) * radarRadius
+        );
+        ctx.stroke();
+        ctx.restore();
+
+        // 2. Floating Telemetry Glyphs
+        ctx.font = '10px "JetBrains Mono", monospace';
+        hudGlyphs.forEach(g => {
+          g.y += g.vy;
+          if (g.y < -20) {
+            g.y = canvas.height + 20;
+            g.x = Math.random() * canvas.width;
+            g.text = glyphWords[Math.floor(Math.random() * glyphWords.length)];
+          }
+          ctx.fillStyle = `rgba(229, 169, 60, ${g.alpha})`;
+          ctx.fillText(`[+] ${g.text}`, g.x, g.y);
+        });
+
+        // 3. Particles & Constellation Links
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          p.alpha += p.pulseSpeed * p.pulseDir;
+          if (p.alpha > 0.8 || p.alpha < 0.2) p.pulseDir *= -1;
+
+          if (p.x < 0) p.x = canvas.width;
+          if (p.x > canvas.width) p.x = 0;
+          if (p.y < 0) p.y = canvas.height;
+          if (p.y > canvas.height) p.y = 0;
+
+          if (mouse.active) {
+            const dx = mouse.x - p.x;
+            const dy = mouse.y - p.y;
+            const dist = Math.hypot(dx, dy);
             if (dist < 140) {
-              ctx.strokeStyle = `rgba(0, 240, 255, ${0.18 * (1 - dist / 140)})`;
-              ctx.lineWidth = 1;
+              const force = (140 - dist) / 140;
+              p.x -= (dx / dist) * force * 4.5;
+              p.y -= (dy / dist) * force * 4.5;
+
+              ctx.strokeStyle = `rgba(229, 169, 60, ${force * 0.4})`;
+              ctx.lineWidth = 0.8;
               ctx.beginPath();
-              ctx.moveTo(nodes[i].x, nodes[i].y);
-              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.stroke();
+            }
+          }
+
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+            if (dist < 90) {
+              const lineAlpha = (1 - dist / 90) * 0.25;
+              ctx.strokeStyle = p.color === '#e61937' ? `rgba(230, 25, 55, ${lineAlpha})` : `rgba(229, 169, 60, ${lineAlpha})`;
+              ctx.lineWidth = 0.6;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
               ctx.stroke();
             }
           }
         }
 
-        // Draw nodes
-        nodes.forEach(node => {
-          node.x += node.vx;
-          node.y += node.vy;
+        // 4. Cursor Targeting Reticle
+        if (mouse.active) {
+          ctx.save();
+          ctx.strokeStyle = "rgba(229, 169, 60, 0.5)";
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
 
-          if (node.x < 0 || node.x > width) node.vx *= -1;
-          if (node.y < 0 || node.y > height) node.vy *= -1;
-
-          ctx.fillStyle = 'rgba(0, 240, 255, 0.5)';
           ctx.beginPath();
-          ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
-          ctx.fill();
-        });
+          ctx.arc(mouse.x, mouse.y, 22, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
 
-        requestAnimationFrame(renderCanvas);
+          ctx.strokeStyle = "rgba(230, 25, 55, 0.75)";
+          ctx.beginPath();
+          ctx.moveTo(mouse.x - 7, mouse.y);
+          ctx.lineTo(mouse.x + 7, mouse.y);
+          ctx.moveTo(mouse.x, mouse.y - 7);
+          ctx.lineTo(mouse.x, mouse.y + 7);
+          ctx.stroke();
+
+          ctx.font = '9px "JetBrains Mono", monospace';
+          ctx.fillStyle = "rgba(229, 169, 60, 0.85)";
+          ctx.fillText(`LOC [${Math.floor(mouse.x)}, ${Math.floor(mouse.y)}]`, mouse.x + 14, mouse.y - 12);
+          ctx.restore();
+        }
+
+        requestAnimationFrame(drawTacticalBackground);
       }
-      renderCanvas();
+
+      drawTacticalBackground();
+    }
+
+    // Live Indian Standard Time (IST) Clock
+    function updateClock() {
+      try {
+        const options = {
+          timeZone: 'Asia/Kolkata',
+          hour12: false,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        };
+        const formatter = new Intl.DateTimeFormat([], options);
+        document.getElementById('clockIST').innerText = formatter.format(new Date()) + " IST";
+      } catch (e) {
+        document.getElementById('clockIST').innerText = new Date().toLocaleTimeString() + " IST";
+      }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Stat Counter Animation
+    window.addEventListener('DOMContentLoaded', () => {
+      const counters = document.querySelectorAll('.stat-counter');
+      counters.forEach(c => {
+        const target = parseFloat(c.getAttribute('data-target'));
+        const isDecimal = target % 1 !== 0;
+        let count = 0;
+        const step = target / 40;
+
+        const update = () => {
+          count += step;
+          if (count < target) {
+            c.innerText = isDecimal ? count.toFixed(2) : Math.ceil(count);
+            setTimeout(update, 25);
+          } else {
+            c.innerText = isDecimal ? target.toFixed(2) : target.toLocaleString();
+          }
+        };
+        update();
+      });
+
+      const yr = document.getElementById('yearEl');
+      if (yr) yr.innerText = new Date().getFullYear();
     });
   </script>
 </body>
